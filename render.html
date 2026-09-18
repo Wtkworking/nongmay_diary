@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="app-version" content="r1.1">
+<meta name="app-version" content="r1.2">
 <title>อ่านตารางเวร 💗 NongMay Reader</title>
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -47,6 +47,7 @@ h1::before{content:"💗 "}
 .d.OFF input{color:var(--off-ink)}.d.N input{color:#5b4bd6}.d.DN input{color:#8A3FB8}
 .d.bad{border-color:var(--danger)}.d.bad input{color:var(--danger)}
 .d.diff{background:#FFF3C4;border-color:#E2B93B}
+.d .note i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:2px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
 .d .note{font-size:9.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pieces{display:flex;gap:6px;margin-top:8px}.pieces img{width:50%;border-radius:10px;border:1px solid var(--line)}
 .legend{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.6}
@@ -85,7 +86,7 @@ h1::before{content:"💗 "}
     <div class="legend" style="margin-top:6px;text-align:center">ปุ่มชมพูจะพารหัสกลับไปที่แอปให้เอง ไม่ต้องก๊อปวางก็ได้</div>
     <div class="subhead" style="margin-top:12px">ตรวจทีละวัน (แก้ในช่องได้ รหัสด้านบนจะอัปเดตเอง)</div>
     <div class="days" id="days"></div>
-    <div class="legend">💡 วางรหัสในแอปที่ 📥 นำเข้า → ⌨️ พิมพ์ → อ่านรหัส<br>รหัส: X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N · D1/N · D12/N</div>
+    <div class="legend">💡 วางรหัสในแอปที่ 📥 นำเข้า → ⌨️ พิมพ์ → อ่านรหัส<br>สีช่อง = ตำแหน่ง (ต่อท้าย @ เช่น D@GP, D/N@GP+INC_N): INC_D Inc.DAY · INC_N Inc.NIGHT · SX · ORTHO · GP · URO · VS Vital sign · LAB เจาะเลือด<br>รหัส: X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N · D1/N · D12/N</div>
   </div>
 
   <details class="card" style="font-size:13px;color:var(--ink-2)"><summary style="cursor:pointer;color:var(--brand);font-weight:600">⚙️ ตั้งค่าการเชื่อมต่อ</summary>
@@ -110,6 +111,12 @@ $('name').oninput=e=>document.querySelectorAll('.nm').forEach(x=>x.textContent=e
 
 /* ===== รหัสเวร ===== */
 const CODES={'X':{type:'OFF'},'D':{type:'D',start:'08:00',end:'20:00'},'D*':{type:'D',start:'08:00',end:'22:00'},'ข':{type:'D',start:'08:00',end:'17:00'},'D1':{type:'D',start:'09:00',end:'20:00'},'D1*':{type:'D',start:'09:00',end:'22:00'},'D12':{type:'D',start:'12:00',end:'20:00'},'D12*':{type:'D',start:'12:00',end:'22:00'},'N':{type:'N',start:'20:00',end:'08:00'},'D/N':{type:'DN',start:'08:00',end:'08:00'},'D1/N':{type:'DN',start:'09:00',end:'08:00'},'D12/N':{type:'DN',start:'12:00',end:'08:00'}};
+const POSTS={INC_D:{label:'Inc. DAY',color:'#FF3DDA'},INC_N:{label:'Inc. NIGHT',color:'#38E1FF'},SX:{label:'หน้าห้อง Sx.',color:'#7ED321'},ORTHO:{label:'หน้าห้อง Ortho.',color:'#FF2D2D'},GP:{label:'หน้าห้อง GP.',color:'#FFE600'},URO:{label:'หน้าห้อง UroSx.',color:'#B39DDB'},VS:{label:'วัด Vital sign',color:'#C6E37A'},LAB:{label:'เจาะเลือดห้องแลป',color:'#0FA958'}};
+const POST_ORDER=['INC_D','INC_N','SX','ORTHO','GP','URO','VS','LAB'];
+const postLabel=k=>POSTS[k]?POSTS[k].label:'';
+function splitToken(tok){const [code,rest]=String(tok).split('@');let post='',postN='';if(rest){const parts=rest.toUpperCase().split('+');post=POSTS[parts[0]]?parts[0]:'';postN=parts[1]&&POSTS[parts[1]]?parts[1]:'';}return{code:code||'',post,postN};}
+function joinToken(code,post,postN){let t=code||'X';if(post||postN)t+='@'+(post||'')+(postN?'+'+postN:'');return t;}
+function postDesc(sh){const a=[];if(sh.post)a.push((sh.type==='DN'?'กลางวัน ':'')+postLabel(sh.post));if(sh.postN)a.push('กลางคืน '+postLabel(sh.postN));return a.join(' · ');}
 const toMin=t=>{const [h,m]=t.split(':').map(Number);return h*60+m;};
 function parseCode(raw){let c=String(raw||'').trim().replace(/\s+/g,'').toUpperCase().replace('Х','X').replace('×','X');if(!c)return null;if(/^(X|OFF|-|0|หยุด)$/.test(c))return{type:'OFF',code:'X'};if(CODES[c])return Object.assign({code:c},CODES[c]);const m=c.match(/^(\d{1,2})(?:[:.]?(\d{2}))?-(\d{1,2})(?:[:.]?(\d{2}))?$/);if(m){const st=`${pad(m[1])}:${m[2]||'00'}`,en=`${pad(m[3])}:${m[4]||'00'}`;return{type:toMin(en)<=toMin(st)?'DN':'D',code:c,start:st,end:en};}if(/\/N$/.test(c)){const b=parseCode(c.replace(/\/N$/,''));if(b&&b.type==='D')return{type:'DN',code:c,start:b.start,end:'08:00'};}return null;}
 const hours=sh=>{if(!sh||sh.type==='OFF')return 0;let d=toMin(sh.end)-toMin(sh.start);if(d<=0)d+=1440;return d/60;};
@@ -148,11 +155,11 @@ async function run(){
     for(let i=0;i<pieces.length;i++){
       st.textContent=`🤖 AI${pro?' (แม่นสูง)':''} กำลังอ่าน${split?` ส่วนที่ ${i+1}/${pieces.length}`:''}… (${pro?'30–60':'10–30'} วินาที)`;
       const res=await ask(pieces[i],pro);
-      (res.days||[]).forEach(d=>{const n=Number(d.day);if(!n)return;const code=String(d.code||'').trim();if(!byDay[n]||(code&&!byDay[n].code))byDay[n]={code,note:String(d.note||'').trim()};});
+      (res.days||[]).forEach(d=>{const n=Number(d.day);if(!n)return;const code=String(d.code||'').trim();const post=POSTS[String(d.post||'').toUpperCase()]?String(d.post).toUpperCase():'';const postN=POSTS[String(d.post_night||'').toUpperCase()]?String(d.post_night).toUpperCase():'';if(!byDay[n]||(code&&!byDay[n].code))byDay[n]={code,note:String(d.note||'').trim(),post,postN};});
       if(res.name&&!name)name=res.name;if(res.total_hours!=null&&Number.isFinite(Number(res.total_hours)))total=Number(res.total_hours);if(res.month)month=res.month;
     }
     if(month&&/^\d{4}-\d{2}$/.test(month)){let [y,m]=month.split('-').map(Number);if(y>2400)y-=543;$('month').value=`${y}-${pad(m)}`;}
-    const n=daysIn($('month').value);rows=[];for(let d=1;d<=n;d++)rows.push({day:d,code:(byDay[d]&&byDay[d].code)||'',note:(byDay[d]&&byDay[d].note)||''});
+    const n=daysIn($('month').value);rows=[];for(let d=1;d<=n;d++)rows.push({day:d,code:(byDay[d]&&byDay[d].code)||'',note:(byDay[d]&&byDay[d].note)||'',post:(byDay[d]&&byDay[d].post)||'',postN:(byDay[d]&&byDay[d].postN)||''});
     if(!Object.keys(byDay).length)throw new Error('AI ไม่พบแถวชื่อนี้ ลองครอปให้เห็นชื่อชัด ๆ');
     $('foundName').textContent=name?'· พบ: '+name:'';render();
     st.innerHTML='อ่านเสร็จแล้ว ✨ ตรวจกับรูปด้านบนก่อนก๊อปนะ <button class="btn" id="again" style="margin-left:6px;min-height:34px;padding:4px 12px">✂️ ครอปใหม่</button>';
@@ -163,16 +170,16 @@ function render(){
   $('out').style.display='block';
   let calc=0,bad=0;
   $('days').innerHTML=rows.map((r,i)=>{const sh=r.code?parseCode(r.code):{type:'OFF'};const isBad=!sh;if(isBad)bad++;else calc+=hours(sh);
-    return `<div class="d ${sh?sh.type:''}${isBad?' bad':''}"><small>วันที่ ${r.day}</small><input data-i="${i}" value="${r.code.replace(/"/g,'&quot;')}" placeholder="X"><div class="note">${r.note||''}</div></div>`;}).join('');
+    const pc=[r.post,r.postN].filter(Boolean).map(k=>`<i style="background:${POSTS[k].color}"></i>`).join('');return `<div class="d ${sh?sh.type:''}${isBad?' bad':''}"><small>วันที่ ${r.day}</small><input data-i="${i}" value="${joinToken(r.code,r.post,r.postN).replace(/"/g,'&quot;')}" placeholder="X"><div class="note">${pc}${r.note||''}</div></div>`;}).join('');
   calc=Math.round(calc);
-  $('result').textContent=rows.map(r=>r.code||'X').join(' ');
+  $('result').textContent=rows.map(r=>joinToken(r.code,r.post,r.postN)).join(' ');
   const hb=$('hours');
   if(total!=null){const ok=calc===total&&!bad;hb.className='hours '+(ok?'ok':'bad');hb.innerHTML=`<span>ชั่วโมงจากรหัส <b>${calc}</b> · ในตาราง <b>${total}</b></span><span>${ok?'✅ ตรงกัน อ่านถูกทั้งแถว':'⚠️ ไม่ตรง มีบางช่องผิด ไล่เช็กด้านล่างหรือครอปใหม่'}</span>`;}
   else{hb.className='hours';hb.innerHTML=`<span>ชั่วโมงรวมจากรหัส <b>${calc}</b> ชม.</span><span style="color:var(--ink-3)">ครอปให้เห็นช่อง "รวม" จะเช็กอัตโนมัติได้</span>`;}
   if(bad){hb.className='hours bad';hb.innerHTML=`<span>มี <b>${bad}</b> ช่องที่ไม่รู้จักรหัส</span><span>แก้ในช่องสีแดงด้านล่าง</span>`;}
 }
-$('days').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;rows[+inp.dataset.i].code=inp.value;clearTimeout(window._t);window._t=setTimeout(()=>{const i=inp.dataset.i;render();const a=$('days').querySelector(`input[data-i="${i}"]`);if(a){a.focus();}},600);});
-$('back').onclick=()=>{const codes=rows.map(r=>r.code||'X').join(' ');location.href='index.html?codes='+encodeURIComponent(codes)+'&month='+encodeURIComponent($('month').value)+(total!=null?'&total='+total:'');};
+$('days').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;{const t=splitToken(inp.value);Object.assign(rows[+inp.dataset.i],{code:t.code,post:t.post,postN:t.postN});}clearTimeout(window._t);window._t=setTimeout(()=>{const i=inp.dataset.i;render();const a=$('days').querySelector(`input[data-i="${i}"]`);if(a){a.focus();}},600);});
+$('back').onclick=()=>{const codes=rows.map(r=>joinToken(r.code,r.post,r.postN)).join(' ');location.href='index.html?codes='+encodeURIComponent(codes)+'&month='+encodeURIComponent($('month').value)+(total!=null?'&total='+total:'');};
 $('copy').onclick=async()=>{const t=$('result').textContent;try{await navigator.clipboard.writeText(t);}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}const el=$('toast');el.textContent='ก๊อปรหัสแล้ว 💗 ไปวางในแอปได้เลย';el.style.display='block';setTimeout(()=>el.style.display='none',2500);};
 </script>
 </body>
