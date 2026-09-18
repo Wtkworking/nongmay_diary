@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="2.6">
+<meta name="app-version" content="2.7">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -315,7 +315,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.6</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.7</span></div>
     </div>
   </div>
 </div>
@@ -793,13 +793,8 @@ document.addEventListener('input',e=>{const ta=e.target.closest('[data-note]');i
 
 /* ===== reminders ===== */
 let notifOn=false;
-function updateBell(){notifOn=('Notification' in window)&&Notification.permission==='granted';$('bellDot').hidden=notifOn;}
-$('bellBtn').onclick=async()=>{
-  if(!('Notification' in window)){toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนระบบ','จะแจ้งเตือนภายในหน้าแทน');return;}
-  if(Notification.permission==='granted'){toast('การแจ้งเตือนเปิดอยู่แล้ว','จะเตือนเมื่อถึงเวลาที่ตั้งไว้ขณะเปิดหน้านี้');return;}
-  const p=await Notification.requestPermission();updateBell();
-  toast(p==='granted'?'เปิดการแจ้งเตือนแล้ว':'ยังไม่ได้อนุญาต',p==='granted'?'จะปลุกก่อนเข้าเวรเช้า และเตือนก่อนกิจกรรม':'ยังคงได้รับการแจ้งเตือนภายในหน้า');
-};
+function updateBell(){notifOn=('Notification' in window)&&Notification.permission==='granted';$('bellDot').hidden=true;}
+$('bellBtn').onclick=()=>{toast('รอพบกับระบบแจ้งเตือนพิเศษสำหรับที่รักเร็วๆนี้น้า 💗');};
 function fireReminder(title,body,key){if(state.fired[key])return;state.fired[key]=1;save();toast('🔔 '+title,body);if(notifOn){try{new Notification(title,{body});}catch(e){}}}
 function checkReminders(){
   const now=new Date(),win=10*60*1000;
