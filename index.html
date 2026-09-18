@@ -78,6 +78,22 @@ header{background:linear-gradient(180deg,#FFFFFF,#FFF7FA);border-bottom-color:va
 .switch{appearance:none;width:46px;height:26px;border-radius:999px;background:var(--line-2);position:relative;margin:0;cursor:pointer;transition:background .2s}
 .switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
 .switch:checked{background:var(--brand)}.switch:checked::after{left:23px}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;border:2px dashed var(--line-2);border-radius:18px;padding:18px 14px;background:var(--bg);cursor:pointer;margin-bottom:10px}
+.drop small{color:var(--ink-2);font-size:12.5px}
+.legend-box{font-size:13px;color:var(--ink-2);margin:6px 0 12px}
+.legend-box summary{cursor:pointer;color:var(--brand);font-weight:600}
+.codes{margin-top:6px;line-height:1.6}
+.prev{background:var(--bg);border-radius:18px;padding:10px 12px;margin-bottom:12px}
+.prev h4{margin:0 0 8px;font-size:14px;display:flex;justify-content:space-between}
+.prev h4 span{color:var(--ink-2);font-weight:500;font-size:12.5px}
+.prow{display:grid;grid-template-columns:34px 78px 1fr;gap:8px;align-items:center;padding:4px 0;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.prow .pd{font-weight:600;text-align:center}.prow .pd small{display:block;font-weight:400;color:var(--ink-3);font-size:10px}
+.prow input{padding:5px 8px;min-height:32px;border-radius:9px;font-size:13px;text-align:center}
+.prow .pr{font-size:12px;color:var(--ink-2)}
+.prow .pr .shift{display:inline-block;width:auto;padding:1px 7px;margin-right:4px;font-size:10.5px}
+.prow.bad input{border-color:var(--danger);background:#FFF0F3}
+.prow.bad .pr{color:var(--danger)}
 .sparkle{font-size:13px;color:var(--ink-3);text-align:center;margin:4px 0 0}
 .arch textarea{border-radius:14px;background:#FFF8FB}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header,:root:not([data-theme="light"]) .sheet{background:var(--paper)} :root:not([data-theme="light"]) .day.today{background:var(--paper)} :root:not([data-theme="light"]) .arch textarea{background:transparent}}
@@ -170,8 +186,8 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
 .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
 
 /* sheet */
-#sheetWrap{position:fixed;inset:0;z-index:40;display:none}
-#sheetWrap.open{display:block}
+#sheetWrap,.wrap{position:fixed;inset:0;z-index:40;display:none}
+#sheetWrap.open,.wrap.open{display:block}
 .scrim{position:absolute;inset:0;background:rgba(10,12,20,.45);backdrop-filter:blur(2px)}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:22px 22px 0 0;box-shadow:var(--shadow);max-height:92dvh;display:flex;flex-direction:column;animation:up .22s ease-out;padding-bottom:var(--safe)}
 @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
@@ -282,6 +298,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
         <button class="btn small" id="prevM" aria-label="เดือนก่อน">‹</button>
         <button class="btn small" id="todayBtn">วันนี้</button>
         <button class="btn small" id="nextM" aria-label="เดือนถัดไป">›</button>
+        <button class="btn small primary" id="importBtn" aria-label="นำเข้าตารางเวร">📥 นำเข้า</button>
       </div>
       <div class="summary" id="summary"></div>
       <div class="weekdays"><div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div></div>
@@ -360,7 +377,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
         <input class="input" id="sWard" placeholder="วอร์ด เช่น ICU 💊" style="margin-bottom:10px">
         <label class="alarm" for="alarmOn">
           <span class="alarm-ic">⏰</span>
-          <span class="alarm-tx"><b>ปลุกล่วงหน้า 07:10</b><small>ทุกวันที่เข้าเวร 08:00 (Day และควบ)</small></span>
+          <span class="alarm-tx"><b>ปลุกก่อนเข้าเวรเช้า 50 นาที</b><small>เข้า 08:00 ปลุก 07:10 · เข้า 09:00 ปลุก 08:10</small></span>
           <input type="checkbox" id="alarmOn" class="switch">
         </label>
         <button class="btn primary full" id="saveShift">บันทึกเวร</button>
@@ -390,18 +407,80 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
   </div>
 </div>
 
+
+<!-- import sheet -->
+<div id="impWrap" class="wrap" role="dialog" aria-modal="true">
+  <div class="scrim" data-close="imp"></div>
+  <div class="sheet">
+    <div class="grip"></div>
+    <div class="sheet-head"><div style="flex:1"><h3>📥 นำเข้าตารางเวรจาก รพ.</h3><p id="impSub">ดึงเฉพาะแถวของคุณมาลงปฏิทินอัตโนมัติ</p></div><button class="btn small ghost" data-close="imp" aria-label="ปิด">✕</button></div>
+    <div class="sheet-body">
+      <div class="row">
+        <div><div class="subhead">เดือนที่นำเข้า</div><input class="input" type="month" id="impMonth"></div>
+        <div><div class="subhead">ชื่อในตาราง</div><input class="input" id="impName" value="สุชาดา"></div>
+      </div>
+      <div class="seg" id="impSeg"><button data-pane="file" aria-pressed="true">📄 ไฟล์ Excel</button><button data-pane="text" aria-pressed="false">⌨️ พิมพ์รหัส</button></div>
+      <div class="pane active" id="imp-file">
+        <label class="drop" for="impFile"><span style="font-size:28px">📊</span><b>แตะเพื่อเลือกไฟล์ตารางเวร</b><small>.xlsx .xls .csv ที่ รพ. ส่งให้ — ระบบจะหาแถว "<span id="impNameEcho">สุชาดา</span>" เอง</small><input type="file" id="impFile" accept=".xlsx,.xls,.csv" hidden></label>
+      </div>
+      <div class="pane" id="imp-text">
+        <textarea class="input" id="impText" rows="3" placeholder="พิมพ์รหัสตามลำดับวันที่ 1 ถึงสิ้นเดือน เว้นวรรคคั่น เช่น&#10;X X X D/N N X D D/N X D* D1/N X D X D D12/N X D D/N X D D X D D1/N X D1/N X D"></textarea>
+        <button class="btn full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
+      </div>
+      <details class="legend-box"><summary>รหัสเวรที่รู้จัก</summary>
+        <div class="codes">X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
+      </details>
+      <div id="impPreview"></div>
+      <label class="alarm" style="display:none" id="impReplaceWrap"><span class="alarm-ic">🧹</span><span class="alarm-tx"><b>ล้างเวรเดิมของเดือนนี้ก่อน</b><small>กิจกรรมและงานไม่ถูกลบ</small></span><input type="checkbox" class="switch" id="impReplace" checked></label>
+      <button class="btn primary full" id="impApply" style="display:none">💗 ลงปฏิทินเลย</button>
+    </div>
+  </div>
+</div>
+
 <div id="toasts" aria-live="polite"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ===== state ===== */
 const COLORS=['#FF8FB8','#B39CFF','#7FD8B8','#8CCBFF','#FFB48A','#FFE38C'];
 const SHIFTS={D:{label:'Day',start:'08:00',end:'20:00'},N:{label:'Night',start:'20:00',end:'08:00'},DN:{label:'Day+Night',start:'08:00',end:'08:00'},OFF:{label:'หยุด'}};
-const ALARM_TIME='07:10';
-const shEnd=sh=>sh.type==='D'&&sh.end?sh.end:SHIFTS[sh.type].end;
+/* รหัสเวรตามตารางของ รพ. */
+const CODES={
+  'X':{type:'OFF',label:'หยุด'},
+  'D':{type:'D',start:'08:00',end:'20:00'},
+  'D*':{type:'D',start:'08:00',end:'22:00'},
+  'ข':{type:'D',start:'08:00',end:'17:00'},
+  'D1':{type:'D',start:'09:00',end:'20:00'},
+  'D1*':{type:'D',start:'09:00',end:'22:00'},
+  'D12':{type:'D',start:'12:00',end:'20:00'},
+  'D12*':{type:'D',start:'12:00',end:'22:00'},
+  'N':{type:'N',start:'20:00',end:'08:00'},
+  'D/N':{type:'DN',start:'08:00',end:'08:00'},
+  'D1/N':{type:'DN',start:'09:00',end:'08:00'},
+  'D12/N':{type:'DN',start:'12:00',end:'08:00'},
+};
+const ALARM_BEFORE=50; // ปลุกก่อนเข้าเวรเช้า 50 นาที (08:00 → 07:10)
+const shStart=sh=>sh.start||SHIFTS[sh.type].start;
+const shEnd=sh=>sh.end||SHIFTS[sh.type].end;
+const shCode=sh=>sh.code||(sh.type==='DN'?'D/N':sh.type==='OFF'?'X':sh.type==='D'&&sh.end==='22:00'?'D*':sh.type);
+const shCross=sh=>sh.type!=='OFF'&&shEnd(sh)<=shStart(sh);
 const dm=s=>{const d=parseYmd(s);return `${d.getDate()}/${pad(d.getMonth()+1)}`;};
-const shRange=(date,sh)=>{if(sh.type==='OFF')return null;const nx=parseYmd(date);nx.setDate(nx.getDate()+1);const endDate=sh.type==='D'?date:ymd(nx);return{sd:date,st:SHIFTS[sh.type].start,ed:endDate,et:shEnd(sh)};};
+const shRange=(date,sh)=>{if(sh.type==='OFF')return null;const nx=parseYmd(date);nx.setDate(nx.getDate()+1);return{sd:date,st:shStart(sh),ed:shCross(sh)?ymd(nx):date,et:shEnd(sh)};};
 const shRangeText=(date,sh)=>{const r=shRange(date,sh);if(!r)return '';return r.sd===r.ed?`(${dm(r.sd)}) ${r.st.replace(':','.')} ถึง ${r.et.replace(':','.')} น.`:`(${dm(r.sd)}) ${r.st.replace(':','.')} ถึง (${dm(r.ed)}) ${r.et.replace(':','.')} น.`;};
-const shHours=sh=>sh.type==='D'?(sh.end==='22:00'?14:12):sh.type==='N'?12:sh.type==='DN'?24:0;
+const toMin=t=>{const [h,m]=t.split(':').map(Number);return h*60+m;};
+const shHours=sh=>{if(sh.type==='OFF')return 0;let d=toMin(shEnd(sh))-toMin(shStart(sh));if(d<=0)d+=1440;return Math.round(d/60*10)/10;};
+const alarmTime=sh=>{if(sh.type==='OFF')return null;const st=toMin(shStart(sh));if(st>=12*60)return null;const a=st-ALARM_BEFORE;return `${pad(Math.floor(a/60))}:${pad(a%60)}`;};
+/* แปลงรหัสเป็นเวร รองรับ 7-12, 8-12 (ชั่วโมงพิเศษ) ด้วย */
+function parseCode(raw){
+  let c=String(raw||'').trim().replace(/\s+/g,'').toUpperCase().replace('Х','X').replace('×','X');
+  if(!c)return null;
+  if(/^(X|OFF|-|0|หยุด)$/.test(c))return{type:'OFF',code:'X'};
+  if(CODES[c])return Object.assign({code:c},CODES[c]);
+  const m=c.match(/^(\d{1,2})(?::?(\d{2}))?-(\d{1,2})(?::?(\d{2}))?$/);
+  if(m){const st=`${pad(m[1])}:${m[2]||'00'}`,en=`${pad(m[3])}:${m[4]||'00'}`;return{type:toMin(en)<=toMin(st)?'DN':'D',code:c,start:st,end:en};}
+  if(/\/N$/.test(c)){const b=parseCode(c.replace(/\/N$/,''));if(b&&b.type==='D')return{type:'DN',code:c,start:b.start,end:'08:00'};}
+  return null;
+}
 const LS_KEY='wen.v1';
 let state={shifts:{},events:[],todos:[],fired:{},user:null,alarm:true,updatedAt:0};
 let saveTimer=null;
@@ -429,8 +508,8 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwAovt4s_tTQRePvIFZ1AjCbOUtP7LbsHO9-tTtEqUnN9ySTOPD0rMnF1TMAZVQhmrd/exec';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
-const SYNC_KEY = 'nmay&pgolf';
+const SYNC_URL = '';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
+const SYNC_KEY = 'nongmay-love-2569';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
 
@@ -503,7 +582,7 @@ function renderCal(){
     if(!other&&sh)cnt[sh.type]=(cnt[sh.type]||0)+1;
     const r=sh?shRange(s,sh):null;
     const timeHtml=r?(r.sd===r.ed?`<span class="stime">${r.st.replace(':','.')}<br><em>ถึง</em><br>${r.et.replace(':','.')}</span>`:`<span class="stime">${dm(r.sd)} ${r.st.replace(':','.')}<br><em>ถึง</em><br>${dm(r.ed)} ${r.et.replace(':','.')}</span>`):'';
-    const shiftHtml=sh?`<span class="shift ${sh.type}">${sh.type==='DN'?'D+N':sh.type==='OFF'?'หยุด':sh.type==='D'&&sh.end==='22:00'?'D22':sh.type}</span>${timeHtml}`:`<span class="shift none">·</span>`;
+    const shiftHtml=sh?`<span class="shift ${sh.type}">${sh.type==='OFF'?'หยุด':esc(shCode(sh))}</span>${timeHtml}`:`<span class="shift none">·</span>`;
     const items=[...ev.map(e=>({k:'e',...e})),...td.map(x=>({k:'t',...x}))];
     const maxShow=sh?(sh.type==='OFF'?2:1):3;
     const pills=items.slice(0,maxShow).map(x=>x.k==='e'?`<span class="pill" style="background:${x.color}">${x.emoji?`<span class="em">${x.emoji}</span>`:''}${esc(x.title)}</span>`:`<span class="pill td${x.done?' done':''}">${x.done?'💗':'☐'} ${esc(x.title)}</span>`).join('');
@@ -541,7 +620,7 @@ function renderSheet(){
   $('shSub').textContent=parts.join(' · ')||'ยังว่าง';
   [...$('shiftPick').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===pickShift));
   let h='';
-  if(sh&&sh.type!=='OFF')h+=`<div class="item"><span class="swatch shift ${sh.type}" style="width:6px"></span><div class="body"><div class="t">เวร ${SHIFTS[sh.type].label}</div><div class="m" style="color:var(--ink)">${shRangeText(sel,sh)}</div><div class="m">${sh.ward?esc(sh.ward)+' · ':''}${shHours(sh)} ชม.${state.alarm!==false&&SHIFTS[sh.type].start==='08:00'?' · ⏰ ปลุก '+ALARM_TIME:''}</div></div></div>`;
+  if(sh&&sh.type!=='OFF')h+=`<div class="item"><span class="swatch shift ${sh.type}" style="width:6px"></span><div class="body"><div class="t">เวร ${esc(shCode(sh))} <span style="color:var(--ink-3);font-weight:400">(${SHIFTS[sh.type].label})</span></div><div class="m" style="color:var(--ink)">${shRangeText(sel,sh)}</div><div class="m">${sh.ward?esc(sh.ward)+' · ':''}${shHours(sh)} ชม.${state.alarm!==false&&alarmTime(sh)?' · ⏰ ปลุก '+alarmTime(sh):''}</div></div></div>`;
   if(sh&&sh.type==='OFF')h+=`<div class="item"><span class="swatch" style="background:var(--off);width:6px"></span><div class="body"><div class="t">💗 วันหยุด</div><div class="m">${esc(sh.ward||'พักผ่อนให้เต็มที่นะคนเก่ง 💗')}</div></div></div>`;
   ev.forEach(e=>{h+=`<div class="item"><span class="swatch" style="background:${e.color}"></span>${e.emoji?`<span class="em">${e.emoji}</span>`:''}<div class="body"><div class="t">${esc(e.title)}</div><div class="m">${e.start}–${e.end}${e.remind!==''&&e.remind!=null?' · แจ้งเตือน'+remindLabel(e.remind):''}${e.tag?' · '+esc(e.tag):''}</div></div><button class="x" data-del-e="${e.id}" aria-label="ลบ">✕</button></div>`;});
   td.forEach(t=>{h+=todoRow(t);});
@@ -549,10 +628,11 @@ function renderSheet(){
 }
 $('shiftPick').onclick=e=>{const b=e.target.closest('button');if(!b)return;pickShift=b.dataset.s;[...$('shiftPick').children].forEach(x=>x.setAttribute('aria-pressed',x===b));$('dayEndWrap').style.display=pickShift==='D'?'block':'none';};
 $('dayEnd').onclick=e=>{const b=e.target.closest('button');if(!b)return;dayEnd=b.dataset.end;[...$('dayEnd').children].forEach(x=>x.setAttribute('aria-pressed',x===b));};
-$('alarmOn').onchange=e=>{state.alarm=e.target.checked;save();toast(state.alarm?'เปิดปลุก 07:10 แล้ว ⏰':'ปิดปลุกแล้ว',state.alarm?'จะปลุกทุกวันที่เข้าเวร 08:00 ขณะเปิดแอปไว้':'');};
+$('alarmOn').onchange=e=>{state.alarm=e.target.checked;save();toast(state.alarm?'เปิดปลุกแล้ว ⏰':'ปิดปลุกแล้ว',state.alarm?'จะปลุกก่อนเข้าเวรเช้า 50 นาที ขณะเปิดแอปไว้':'');};
 $('saveShift').onclick=()=>{
   if(!pickShift){toast('เลือกประเภทเวรก่อน');return;}
-  state.shifts[sel]={type:pickShift,ward:$('sWard').value.trim(),end:pickShift==='D'?dayEnd:undefined};
+  const base=pickShift==='D'?(dayEnd==='22:00'?CODES['D*']:CODES['D']):pickShift==='N'?CODES['N']:pickShift==='DN'?CODES['D/N']:CODES['X'];
+  state.shifts[sel]=Object.assign({},base,{code:pickShift==='D'?(dayEnd==='22:00'?'D*':'D'):pickShift==='N'?'N':pickShift==='DN'?'D/N':'X',ward:$('sWard').value.trim()});
   delete state.fired['s:'+sel];save();renderCal();renderSheet();
   toast('ลงเวรแล้ว 🩺',`${thShort(sel)} · ${SHIFTS[pickShift].label}`);
   $('clearShift').style.display='block';$('saveShift').textContent='อัปเดตเวร';
@@ -626,17 +706,85 @@ $('bellBtn').onclick=async()=>{
   if(!('Notification' in window)){toast('เบราว์เซอร์นี้ไม่รองรับการแจ้งเตือนระบบ','จะแจ้งเตือนภายในหน้าแทน');return;}
   if(Notification.permission==='granted'){toast('การแจ้งเตือนเปิดอยู่แล้ว','จะเตือนเมื่อถึงเวลาที่ตั้งไว้ขณะเปิดหน้านี้');return;}
   const p=await Notification.requestPermission();updateBell();
-  toast(p==='granted'?'เปิดการแจ้งเตือนแล้ว':'ยังไม่ได้อนุญาต',p==='granted'?'จะปลุก 07:10 ในวันเข้าเวรเช้า และเตือนก่อนกิจกรรม':'ยังคงได้รับการแจ้งเตือนภายในหน้า');
+  toast(p==='granted'?'เปิดการแจ้งเตือนแล้ว':'ยังไม่ได้อนุญาต',p==='granted'?'จะปลุกก่อนเข้าเวรเช้า และเตือนก่อนกิจกรรม':'ยังคงได้รับการแจ้งเตือนภายในหน้า');
 };
 function fireReminder(title,body,key){if(state.fired[key])return;state.fired[key]=1;save();toast('🔔 '+title,body);if(notifOn){try{new Notification(title,{body});}catch(e){}}}
 function checkReminders(){
   const now=new Date(),win=10*60*1000;
-  if(state.alarm!==false){const d=ymd(now);const sh=state.shifts[d];if(sh&&SHIFTS[sh.type].start==='08:00'){const at=parseYmd(d);const [h,m]=ALARM_TIME.split(':').map(Number);at.setHours(h,m,0,0);if(now>=at&&now-at<win&&!state.fired['a:'+d]){fireReminder('⏰ ตื่นได้แล้วคนเก่ง!',`วันนี้เข้าเวร ${SHIFTS[sh.type].label} 08:00${sh.ward?' ที่ '+sh.ward:''} 💗`,'a:'+d);ringAlarm();}}}
+  if(state.alarm!==false){const d=ymd(now);const sh=state.shifts[d];const atT=sh?alarmTime(sh):null;if(atT){const at=parseYmd(d);const [h,m]=atT.split(':').map(Number);at.setHours(h,m,0,0);if(now>=at&&now-at<win&&!state.fired['a:'+d]){fireReminder('⏰ ตื่นได้แล้วคนน่ารัก!',`วันนี้เข้าเวร ${shCode(sh)} ${shStart(sh)}${sh.ward?' · '+sh.ward:''} 💗`,'a:'+d);ringAlarm();}}}
   state.events.forEach(e=>{if(e.remind===''||e.remind==null)return;const at=parseYmd(e.date);const [h,m]=e.start.split(':').map(Number);at.setHours(h,m,0,0);at.setMinutes(at.getMinutes()-Number(e.remind));if(now>=at&&now-at<win)fireReminder(e.title,`${thShort(e.date)} ${e.start}${Number(e.remind)?' · '+remindLabel(e.remind).replace('ก่อน','อีก')+'จะเริ่ม':' · เริ่มแล้ว'}`,'e:'+e.id);});
   state.todos.forEach(t=>{if(t.done||!t.due||t.remind===''||t.remind==null)return;const at=parseYmd(t.due);if(Number(t.remind)===-1){at.setDate(at.getDate()-1);at.setHours(9,0,0,0);}else at.setHours(0,Number(t.remind),0,0);if(now>=at&&now-at<win)fireReminder('งานใกล้ครบกำหนด',`${t.title} · กำหนด ${thShort(t.due)}`,'t:'+t.id);});
 }
 function ringAlarm(){try{const ac=new (window.AudioContext||window.webkitAudioContext)();let t=ac.currentTime;for(let i=0;i<8;i++){const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=i%2?1046:880;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.25,t+.03);g.gain.linearRampToValueAtTime(0,t+.28);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+.3);t+=.38;if(i%2)t+=.25;}}catch(e){}}
 function startReminderLoop(){updateBell();checkReminders();setInterval(checkReminders,30000);}
+
+
+/* ===== นำเข้าตารางเวร ===== */
+let impRows=null; // [{day,code,note}]
+function openImp(){$('impMonth').value=ymd(cur).slice(0,7);$('impWrap').classList.add('open');document.body.style.overflow='hidden';}
+function closeImp(){$('impWrap').classList.remove('open');document.body.style.overflow='';}
+$('importBtn').onclick=openImp;
+document.querySelectorAll('[data-close="imp"]').forEach(el=>el.onclick=closeImp);
+$('impSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('impSeg').children].forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('#impWrap .pane').forEach(x=>x.classList.toggle('active',x.id==='imp-'+b.dataset.pane));};
+$('impName').oninput=e=>{$('impNameEcho').textContent=e.target.value||'…';};
+function daysIn(ym){const [y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();}
+
+$('impParse').onclick=()=>{
+  const toks=$('impText').value.trim().split(/[\s,;|]+/).filter(Boolean);
+  if(!toks.length){toast('ยังไม่ได้พิมพ์รหัส');return;}
+  impRows=toks.map((c,i)=>({day:i+1,code:c,note:''}));renderImpPreview();
+};
+
+$('impFile').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const buf=await f.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});
+    const name=($('impName').value||'').trim();
+    let found=null;
+    for(const sn of wb.SheetNames){
+      const aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});
+      // หาแถวเลขวันที่: มีเซลล์ 1,2,3,... ต่อกัน
+      let hdr=-1,c1=-1;
+      for(let r=0;r<Math.min(aoa.length,60)&&hdr<0;r++){const row=aoa[r];for(let c=0;c<row.length-2;c++){if(Number(row[c])===1&&Number(row[c+1])===2&&Number(row[c+2])===3){hdr=r;c1=c;break;}}}
+      if(hdr<0)continue;
+      // หาแถวชื่อ
+      let nr=-1;for(let r=hdr+1;r<aoa.length;r++){if(aoa[r].some(v=>String(v).replace(/\s+/g,'').includes(name.replace(/\s+/g,'')))){nr=r;break;}}
+      if(nr<0)continue;
+      const n=daysIn($('impMonth').value||ymd(cur).slice(0,7));
+      const rows=[];for(let d=1;d<=n;d++){const c=c1+d-1;rows.push({day:d,code:String(aoa[nr][c]??'').trim(),note:String((aoa[nr+1]||[])[c]??'').trim()});}
+      found=rows;break;
+    }
+    if(!found){toast('ไม่พบแถวชื่อ "'+name+'" ในไฟล์','ลองเช็กการสะกดชื่อ หรือใช้โหมดพิมพ์รหัสแทน');return;}
+    impRows=found;renderImpPreview();toast('อ่านไฟล์สำเร็จ 💞','ตรวจดูก่อนแล้วกดลงปฏิทิน');
+  }catch(err){console.error(err);toast('อ่านไฟล์ไม่ได้','ไฟล์อาจเสียหรือไม่ใช่ Excel/CSV');}
+  e.target.value='';
+};
+
+function renderImpPreview(){
+  const ym=$('impMonth').value||ymd(cur).slice(0,7);const n=daysIn(ym);
+  while(impRows.length<n)impRows.push({day:impRows.length+1,code:'',note:''});
+  impRows=impRows.slice(0,n);
+  let ok=0,bad=0,h='';
+  impRows.forEach((r,i)=>{
+    const date=`${ym}-${pad(r.day)}`;const dow=parseYmd(date).toLocaleDateString('th-TH',{weekday:'short'});
+    const sh=r.code?parseCode(r.code):{type:'OFF',code:'X'};
+    const isBad=!sh;if(isBad)bad++;else ok++;
+    const desc=isBad?'ไม่รู้จักรหัสนี้ แก้ในช่องได้':(sh.type==='OFF'?'💗 หยุด':`<span class="shift ${sh.type}">${esc(shCode(sh))}</span>${shRangeText(date,sh).replace(/\((\d+\/\d+)\) /g,'$1 ')}${r.note?' · '+esc(r.note):''}`);
+    h+=`<div class="prow${isBad?' bad':''}"><div class="pd">${r.day}<small>${dow}</small></div><input class="input" data-i="${i}" value="${esc(r.code)}" placeholder="X"><div class="pr">${desc}</div></div>`;
+  });
+  $('impPreview').innerHTML=`<div class="prev"><h4>ตรวจสอบก่อนลงปฏิทิน <span>${ok} วันพร้อม${bad?` · <b style="color:var(--danger)">${bad} วันต้องแก้</b>`:''}</span></h4>${h}</div>`;
+  $('impReplaceWrap').style.display='flex';$('impApply').style.display='flex';$('impApply').disabled=bad>0;
+}
+$('impPreview').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;impRows[+inp.dataset.i].code=inp.value;clearTimeout(window._impT);window._impT=setTimeout(()=>{const pos=inp.dataset.i;renderImpPreview();const again=$('impPreview').querySelector(`input[data-i="${pos}"]`);if(again){again.focus();again.setSelectionRange(again.value.length,again.value.length);}},500);});
+$('impMonth').onchange=()=>{if(impRows)renderImpPreview();};
+
+$('impApply').onclick=()=>{
+  if(!impRows)return;const ym=$('impMonth').value||ymd(cur).slice(0,7);
+  if($('impReplace').checked){Object.keys(state.shifts).forEach(k=>{if(k.startsWith(ym))delete state.shifts[k];});}
+  let cnt=0;impRows.forEach(r=>{const sh=r.code?parseCode(r.code):{type:'OFF',code:'X'};if(!sh)return;state.shifts[`${ym}-${pad(r.day)}`]=Object.assign({},sh,{ward:r.note||''});cnt++;});
+  save();const [y,m]=ym.split('-').map(Number);cur=new Date(y,m-1,1);renderCal();closeImp();impRows=null;$('impPreview').innerHTML='';$('impApply').style.display='none';$('impReplaceWrap').style.display='none';$('impText').value='';
+  toast('ลงตารางเวรแล้ว 💗',`${parseYmd(ym+'-01').toLocaleDateString('th-TH',{month:'long',year:'numeric'})} · ${cnt} วัน`);
+};
 
 /* ===== nav ===== */
 const TITLES={cal:'NongMay Diary',todo:'งานของฉัน',arch:'ผลงานของฉัน'};
