@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="2.0">
+<meta name="app-version" content="2.1">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -306,7 +306,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.0</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.1</span></div>
     </div>
   </div>
 </div>
@@ -531,7 +531,7 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwQgofvxPHlnjpGWyLsw8ZTs8kLFuVyS_j21prS3grcRZDTtsyxmyRDJ2LRbiDSAAYh/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbxbAe9clTGz1BHc7KBzCG3w2dPsgdwypCKd2YKOeLl5CIDXlrXLGXnxQhYuTfQIJ8Na/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
 const SYNC_KEY = 'nmay&pgolf';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
