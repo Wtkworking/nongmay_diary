@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="1.3">
+<meta name="app-version" content="1.9">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -99,6 +99,21 @@ header{background:linear-gradient(180deg,#FFFFFF,#FFF7FA);border-bottom-color:va
 .prow .pr .shift{display:inline-block;width:auto;padding:1px 7px;margin-right:4px;font-size:10.5px}
 .prow.bad input{border-color:var(--danger);background:#FFF0F3}
 .prow.bad .pr{color:var(--danger)}
+.cropStage{position:relative;width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;touch-action:none;user-select:none}
+.cropStage canvas{display:block;width:100%;height:auto}
+#cropRect{position:absolute;border:2px solid var(--brand);background:rgba(240,97,156,.18);box-shadow:0 0 0 9999px rgba(0,0,0,.35);display:none;pointer-events:none}
+.hoursbox{display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+.hoursbox b{font-size:16px}
+.hoursbox.ok{border-color:var(--ok)}.hoursbox.bad{border-color:var(--danger);color:var(--danger)}
+.code-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.code-grid button{border:2px solid var(--line);background:var(--paper);border-radius:14px;padding:8px 3px 7px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-2);box-shadow:var(--card)}
+.code-grid button .tag{width:100%;border-radius:8px;padding:5px 0;font-weight:700;font-size:13px}
+.code-grid button .tag.shift::before{content:none}
+.code-grid button small{font-size:10.5px;line-height:1.15;text-align:center;white-space:nowrap}
+.code-grid button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.code-grid button.custom .tag{background:var(--brand-soft);color:var(--brand)}
+.readerlink{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#FFE3EE,#EDE7FF);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:12px;color:var(--ink);text-decoration:none}
+.readerlink b{display:block;font-weight:600}.readerlink small{color:var(--ink-2);font-size:12.5px}
 .sparkle{font-size:13px;color:var(--ink-3);text-align:center;margin:4px 0 0}
 .arch textarea{border-radius:14px;background:#FFF8FB}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header,:root:not([data-theme="light"]) .sheet{background:var(--paper)} :root:not([data-theme="light"]) .day.today{background:var(--paper)} :root:not([data-theme="light"]) .arch textarea{background:transparent}}
@@ -282,7 +297,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v1.3</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v1.9</span></div>
     </div>
   </div>
 </div>
@@ -308,13 +323,9 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
       <div class="summary" id="summary"></div>
       <div class="weekdays"><div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div></div>
       <div class="grid" id="grid"></div>
-      <div class="legend">
-        <span>☀️ Day</span>
-        <span>🌙 Night</span>
-        <span>☀️🌙 ควบ</span>
-        <span>💗 วันหยุด</span>
-        <span><i style="border-radius:50%;width:8px;height:8px;background:var(--c3)"></i>กิจกรรม</span>
-      </div>
+      <details class="legend-box" style="margin-top:10px"><summary>รหัสเวรทั้งหมด</summary>
+        <div class="codes">☀️ D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้</div>
+      </details>
       <p class="sparkle">✨ แตะวันเพื่อลงเวรหรือเพิ่มกิจกรรม ✨</p>
     </section>
 
@@ -366,18 +377,12 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
       </div>
 
       <div class="pane active" id="pane-shift">
-        <div class="shift-pick" id="shiftPick">
-          <button data-s="D"><span class="tag shift D">☀️ D</span><small>Day<br>08:00–20:00</small></button>
-          <button data-s="N"><span class="tag shift N">🌙 N</span><small>Night<br>20:00–08:00</small></button>
-          <button data-s="DN"><span class="tag shift DN">☀️🌙</span><small>ควบ<br>08:00–08:00</small></button>
-          <button data-s="OFF"><span class="tag shift OFF">💗</span><small>วันหยุด<br>พักผ่อน</small></button>
-        </div>
-        <div id="dayEndWrap" style="display:none;margin-bottom:10px">
-          <div class="subhead">เลิกเวร Day กี่โมง</div>
-          <div class="seg" id="dayEnd" style="margin-bottom:0">
-            <button data-end="20:00" aria-pressed="true">20:00</button>
-            <button data-end="22:00" aria-pressed="false">22:00</button>
-          </div>
+        <div class="subhead">เลือกรหัสเวรตามตาราง รพ.</div>
+        <div class="code-grid" id="shiftPick"></div>
+        <div id="customWrap" style="display:none;margin:4px 0 10px">
+          <div class="subhead">กำหนดเวลาเอง</div>
+          <div class="row" style="margin-bottom:0"><input class="input" type="time" id="cStart" value="08:00"><input class="input" type="time" id="cEnd" value="12:00"></div>
+          <div class="hint" style="margin-top:6px" id="cHint"></div>
         </div>
         <input class="input" id="sWard" placeholder="วอร์ด เช่น ICU 💊" style="margin-bottom:10px">
         <label class="alarm" for="alarmOn">
@@ -418,27 +423,18 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
   <div class="scrim" data-close="imp"></div>
   <div class="sheet">
     <div class="grip"></div>
-    <div class="sheet-head"><div style="flex:1"><h3>📥 นำเข้าตารางเวรจาก รพ.</h3><p id="impSub">ดึงเฉพาะแถวของคุณมาลงปฏิทินอัตโนมัติ</p></div><button class="btn small ghost" data-close="imp" aria-label="ปิด">✕</button></div>
+    <div class="sheet-head"><div style="flex:1"><h3>📥 นำเข้าตารางเวรจาก รพ.</h3><p id="impSub">วางรหัสเวรทั้งเดือนแล้วลงปฏิทินอัตโนมัติ</p></div><button class="btn small ghost" data-close="imp" aria-label="ปิด">✕</button></div>
     <div class="sheet-body">
       <div class="row">
         <div><div class="subhead">เดือนที่นำเข้า</div><input class="input" type="month" id="impMonth"></div>
         <div><div class="subhead">ชื่อในตาราง</div><input class="input" id="impName" value="สุชาดา"></div>
       </div>
-      <div class="seg" id="impSeg"><button data-pane="img" aria-pressed="true">📷 รูปภาพ</button><button data-pane="file" aria-pressed="false">📄 Excel</button><button data-pane="text" aria-pressed="false">⌨️ พิมพ์</button></div>
-      <div class="pane active" id="imp-img">
-        <label class="drop" for="impImg" id="impImgDrop"><span style="font-size:28px">📷</span><b>แตะเพื่อเลือกรูปตารางเวร</b><small>ถ่ายจากมือถือหรือรูปที่ รพ. ส่งมาก็ได้ AI จะหาแถว "<span class="impNameEcho">สุชาดา</span>" แล้วอ่านให้</small><input type="file" id="impImg" accept="image/*" hidden></label>
-        <div id="impImgStatus" class="hint" style="display:none;text-align:center"></div>
-        <img id="impThumb" alt="" style="display:none;width:100%;border-radius:14px;border:1px solid var(--line);margin-bottom:10px">
-      </div>
-      <div class="pane" id="imp-file">
-        <label class="drop" for="impFile"><span style="font-size:28px">📊</span><b>แตะเพื่อเลือกไฟล์ตารางเวร</b><small>.xlsx .xls .csv ที่ รพ. ส่งให้ — ระบบจะหาแถว "<span class="impNameEcho">สุชาดา</span>" เอง</small><input type="file" id="impFile" accept=".xlsx,.xls,.csv" hidden></label>
-      </div>
-      <div class="pane" id="imp-text">
-        <textarea class="input" id="impText" rows="3" placeholder="พิมพ์รหัสตามลำดับวันที่ 1 ถึงสิ้นเดือน เว้นวรรคคั่น เช่น&#10;X X X D/N N X D D/N X D* D1/N X D X D D12/N X D D/N X D D X D D1/N X D1/N X D"></textarea>
-        <button class="btn full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
-      </div>
+      <a class="readerlink" id="openReader" href="reader.html" target="_blank"><span style="font-size:26px">📷</span><span style="flex:1"><b>อ่านรหัสจากรูปตารางเวร</b><small>เปิดหน้า Reader → เลือกรูป → ก๊อปรหัส → กดกลับมาวางที่นี่</small></span><span>›</span></a>
+      <div class="subhead">วางรหัสเวรตามลำดับวันที่ 1 ถึงสิ้นเดือน</div>
+      <textarea class="input" id="impText" rows="3" placeholder="เช่น X X X D/N N X D D/N X D D1* X X D D D12/N X D D/N X D D D D1/N X D D1/N X D D1/N"></textarea>
+      <button class="btn primary full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
       <details class="legend-box"><summary>รหัสเวรที่รู้จัก</summary>
-        <div class="codes">เดือนจะอ่านจากหัวตารางให้อัตโนมัติ ถ้าไม่ตรงแก้ที่ช่องเดือนด้านบนได้<br>X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
+        <div class="codes">X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
       </details>
       <div id="impPreview"></div>
       <label class="alarm" style="display:none" id="impReplaceWrap"><span class="alarm-ic">🧹</span><span class="alarm-tx"><b>ล้างเวรเดิมของเดือนนี้ก่อน</b><small>กิจกรรมและงานไม่ถูกลบ</small></span><input type="checkbox" class="switch" id="impReplace" checked></label>
@@ -449,7 +445,6 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
 
 <div id="toasts" aria-live="polite"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ===== state ===== */
 const COLORS=['#FF8FB8','#B39CFF','#7FD8B8','#8CCBFF','#FFB48A','#FFE38C'];
@@ -486,7 +481,7 @@ function parseCode(raw){
   if(!c)return null;
   if(/^(X|OFF|-|0|หยุด)$/.test(c))return{type:'OFF',code:'X'};
   if(CODES[c])return Object.assign({code:c},CODES[c]);
-  const m=c.match(/^(\d{1,2})(?::?(\d{2}))?-(\d{1,2})(?::?(\d{2}))?$/);
+  const m=c.match(/^(\d{1,2})(?:[:.]?(\d{2}))?-(\d{1,2})(?:[:.]?(\d{2}))?$/);
   if(m){const st=`${pad(m[1])}:${m[2]||'00'}`,en=`${pad(m[3])}:${m[4]||'00'}`;return{type:toMin(en)<=toMin(st)?'DN':'D',code:c,start:st,end:en};}
   if(/\/N$/.test(c)){const b=parseCode(c.replace(/\/N$/,''));if(b&&b.type==='D')return{type:'DN',code:c,start:b.start,end:'08:00'};}
   return null;
@@ -518,7 +513,7 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = 'https://script.google.com/macros/s/AKfycbz8BBlkmhp_icflySHeMj-pDFh9BkUYniq5Z9KNSsW6cfNNNQELQXAhgiqZb4-ZdxiV/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwQgofvxPHlnjpGWyLsw8ZTs8kLFuVyS_j21prS3grcRZDTtsyxmyRDJ2LRbiDSAAYh/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
 const SYNC_KEY = 'nmay&pgolf';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
@@ -570,7 +565,13 @@ async function init(){
 }
 
 /* ===== calendar ===== */
-let cur=new Date();cur.setDate(1);let sel=todayStr();let color=COLORS[0];let pickShift=null;let dayEnd='20:00';
+let cur=new Date();cur.setDate(1);let sel=todayStr();let color=COLORS[0];let pickCode=null;
+const CODE_ORDER=['D','D*','ข','D1','D1*','D12','D12*','N','D/N','D1/N','D12/N','X'];
+const codeLabel=c=>c==='X'?'💗 หยุด':c==='N'?'🌙 N':c.includes('/N')?'☀️🌙 '+c:'☀️ '+c;
+const codeTime=c=>{const o=CODES[c];return o.type==='OFF'?'พักผ่อน':`${o.start.replace(':','.')}–${o.end.replace(':','.')}${o.type!=='D'?' (+1)':''}`;};
+$('shiftPick').innerHTML=CODE_ORDER.map(c=>`<button type="button" data-s="${c}"><span class="tag shift ${CODES[c].type}">${codeLabel(c)}</span><small>${codeTime(c)}</small></button>`).join('')+`<button type="button" data-s="__custom" class="custom" style="grid-column:span 4;flex-direction:row;justify-content:center;gap:8px"><span class="tag" style="width:auto;padding:5px 12px">⏱️ กำหนดเวลาเอง</span><small>เช่น 7-12 เจาะเลือด, ประชุม 13-16</small></button>`;
+function customHint(){const st=$('cStart').value,en=$('cEnd').value;if(!st||!en){$('cHint').textContent='';return;}const cross=toMin(en)<=toMin(st);let d=toMin(en)-toMin(st);if(d<=0)d+=1440;$('cHint').textContent=`${st.replace(':','.')} ถึง ${en.replace(':','.')}${cross?' (วันถัดไป)':''} · ${Math.round(d/60*10)/10} ชม.`;}
+$('cStart').oninput=customHint;$('cEnd').oninput=customHint;
 const EMOJIS=['💕','💗','😘','💋','🥰','🫂','💏','💑','👩‍❤️‍👨','🧸','🌸','🎂','🎁','🍰','☕','🍜','🎬','✈️','🏖️','🏃‍♀️','🛍️','💐','🐶','🐱'];
 let emoji=EMOJIS[0];
 $('emojis').innerHTML=EMOJIS.map((e,i)=>`<button type="button" data-e="${e}" aria-pressed="${i===0}">${e}</button>`).join('');
@@ -612,7 +613,8 @@ $('todayBtn').onclick=()=>{cur=new Date();cur.setDate(1);renderCal();};
 /* ===== sheet ===== */
 function openSheet(pane){
   const {sh}=itemsOn(sel);
-  pickShift=sh?sh.type:null;dayEnd=sh&&sh.type==='D'&&sh.end?sh.end:'20:00';[...$('dayEnd').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.end===dayEnd));$('dayEndWrap').style.display=pickShift==='D'?'block':'none';$('sWard').value=sh?sh.ward||'':'';$('alarmOn').checked=state.alarm!==false;
+  pickCode=null;if(sh){const c=shCode(sh);if(CODES[c])pickCode=c;else{pickCode='__custom';$('cStart').value=shStart(sh);$('cEnd').value=shEnd(sh);}}
+  $('customWrap').style.display=pickCode==='__custom'?'block':'none';customHint();$('sWard').value=sh?sh.ward||'':'';$('alarmOn').checked=state.alarm!==false;
   $('clearShift').style.display=sh?'block':'none';$('saveShift').textContent=sh?'อัปเดตเวร':'บันทึกเวร';
   setPane(pane||'shift');renderSheet();
   $('sheetWrap').classList.add('open');document.body.style.overflow='hidden';
@@ -628,7 +630,7 @@ function renderSheet(){
   $('shTitle').textContent=thDate(sel);
   const parts=[];if(sh)parts.push('เวร '+(SHIFTS[sh.type].label));if(ev.length)parts.push(ev.length+' กิจกรรม');if(td.length)parts.push(td.length+' งาน');
   $('shSub').textContent=parts.join(' · ')||'ยังว่าง';
-  [...$('shiftPick').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===pickShift));
+  [...$('shiftPick').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===pickCode));
   let h='';
   if(sh&&sh.type!=='OFF')h+=`<div class="item"><span class="swatch shift ${sh.type}" style="width:6px"></span><div class="body"><div class="t">เวร ${esc(shCode(sh))} <span style="color:var(--ink-3);font-weight:400">(${SHIFTS[sh.type].label})</span></div><div class="m" style="color:var(--ink)">${shRangeText(sel,sh)}</div><div class="m">${sh.ward?esc(sh.ward)+' · ':''}${shHours(sh)} ชม.${state.alarm!==false&&alarmTime(sh)?' · ⏰ ปลุก '+alarmTime(sh):''}</div></div></div>`;
   if(sh&&sh.type==='OFF')h+=`<div class="item"><span class="swatch" style="background:var(--off);width:6px"></span><div class="body"><div class="t">💗 วันหยุด</div><div class="m">${esc(sh.ward||'พักผ่อนให้เต็มที่นะคนเก่ง 💗')}</div></div></div>`;
@@ -636,15 +638,16 @@ function renderSheet(){
   td.forEach(t=>{h+=todoRow(t);});
   $('shList').innerHTML=h||'<div class="empty">🌷 วันนี้ยังว่างอยู่ — เลือกด้านล่างเพื่อเพิ่มนะ</div>';
 }
-$('shiftPick').onclick=e=>{const b=e.target.closest('button');if(!b)return;pickShift=b.dataset.s;[...$('shiftPick').children].forEach(x=>x.setAttribute('aria-pressed',x===b));$('dayEndWrap').style.display=pickShift==='D'?'block':'none';};
-$('dayEnd').onclick=e=>{const b=e.target.closest('button');if(!b)return;dayEnd=b.dataset.end;[...$('dayEnd').children].forEach(x=>x.setAttribute('aria-pressed',x===b));};
+$('shiftPick').onclick=e=>{const b=e.target.closest('button');if(!b)return;pickCode=b.dataset.s;[...$('shiftPick').children].forEach(x=>x.setAttribute('aria-pressed',x===b));$('customWrap').style.display=pickCode==='__custom'?'block':'none';customHint();};
 $('alarmOn').onchange=e=>{state.alarm=e.target.checked;save();toast(state.alarm?'เปิดปลุกแล้ว ⏰':'ปิดปลุกแล้ว',state.alarm?'จะปลุกก่อนเข้าเวรเช้า 50 นาที ขณะเปิดแอปไว้':'');};
 $('saveShift').onclick=()=>{
-  if(!pickShift){toast('เลือกประเภทเวรก่อน');return;}
-  const base=pickShift==='D'?(dayEnd==='22:00'?CODES['D*']:CODES['D']):pickShift==='N'?CODES['N']:pickShift==='DN'?CODES['D/N']:CODES['X'];
-  state.shifts[sel]=Object.assign({},base,{code:pickShift==='D'?(dayEnd==='22:00'?'D*':'D'):pickShift==='N'?'N':pickShift==='DN'?'D/N':'X',ward:$('sWard').value.trim()});
+  if(!pickCode){toast('เลือกรหัสเวรก่อน');return;}
+  let sh;
+  if(pickCode==='__custom'){const st=$('cStart').value,en=$('cEnd').value;if(!st||!en){toast('ใส่เวลาเริ่มและเลิกก่อน');return;}sh={type:toMin(en)<=toMin(st)?'DN':'D',code:`${st.replace(':','.')}-${en.replace(':','.')}`,start:st,end:en};}
+  else sh=Object.assign({code:pickCode},CODES[pickCode]);
+  state.shifts[sel]=Object.assign(sh,{ward:$('sWard').value.trim()});
   delete state.fired['s:'+sel];save();renderCal();renderSheet();
-  toast('ลงเวรแล้ว 🩺',`${thShort(sel)} · ${SHIFTS[pickShift].label}`);
+  toast('ลงเวรแล้ว 🩺',`${thShort(sel)} · ${shCode(state.shifts[sel])}`);
   $('clearShift').style.display='block';$('saveShift').textContent='อัปเดตเวร';
   // เลื่อนไปวันถัดไปเพื่อลงเวรต่อเนื่องได้เร็ว
   const nx=parseYmd(sel);nx.setDate(nx.getDate()+1);sel=ymd(nx);
@@ -730,12 +733,19 @@ function startReminderLoop(){updateBell();checkReminders();setInterval(checkRemi
 
 
 /* ===== นำเข้าตารางเวร ===== */
-let impRows=null; // [{day,code,note}]
+let impRows=null,impTotal=null; // [{day,code,note}]
 function openImp(){$('impMonth').value=ymd(cur).slice(0,7);$('impWrap').classList.add('open');document.body.style.overflow='hidden';}
 function closeImp(){$('impWrap').classList.remove('open');document.body.style.overflow='';}
 $('importBtn').onclick=openImp;
+$('openReader').onclick=()=>{$('openReader').href='reader.html?name='+encodeURIComponent($('impName').value||'')+'&month='+encodeURIComponent($('impMonth').value||ymd(cur).slice(0,7));};
+(function(){const q=new URLSearchParams(location.search);const codes=q.get('codes');if(!codes)return;
+  history.replaceState(null,'',location.pathname);
+  const m=q.get('month');if(m&&/^\d{4}-\d{2}$/.test(m)){const [y,mm]=m.split('-').map(Number);cur=new Date(y,mm-1,1);}
+  const t=q.get('total');impTotal=t&&Number.isFinite(Number(t))?Number(t):null;
+  const go=()=>{openImp();if(m)$('impMonth').value=m;$('impText').value=codes;$('impParse').click();toast('รับรหัสจาก Reader แล้ว 💞','ตรวจดูแล้วกดลงปฏิทิน');};
+  if(state.user)setTimeout(go,300);else{const ob=$('loginBtn').onclick;$('loginBtn').onclick=()=>{ob();setTimeout(go,300);};}
+})();
 document.querySelectorAll('[data-close="imp"]').forEach(el=>el.onclick=closeImp);
-$('impSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('impSeg').children].forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('#impWrap .pane').forEach(x=>x.classList.toggle('active',x.id==='imp-'+b.dataset.pane));};
 $('impName').oninput=e=>{document.querySelectorAll('.impNameEcho').forEach(x=>x.textContent=e.target.value||'…');};
 function daysIn(ym){const [y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();}
 
@@ -743,56 +753,6 @@ $('impParse').onclick=()=>{
   const toks=$('impText').value.trim().split(/[\s,;|]+/).filter(Boolean);
   if(!toks.length){toast('ยังไม่ได้พิมพ์รหัส');return;}
   impRows=toks.map((c,i)=>({day:i+1,code:c,note:''}));renderImpPreview();
-};
-
-$('impFile').onchange=async e=>{
-  const f=e.target.files[0];if(!f)return;
-  try{
-    const buf=await f.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});
-    const name=($('impName').value||'').trim();
-    let found=null;
-    for(const sn of wb.SheetNames){
-      const aoa=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,defval:''});
-      // หาแถวเลขวันที่: มีเซลล์ 1,2,3,... ต่อกัน
-      let hdr=-1,c1=-1;
-      for(let r=0;r<Math.min(aoa.length,60)&&hdr<0;r++){const row=aoa[r];for(let c=0;c<row.length-2;c++){if(Number(row[c])===1&&Number(row[c+1])===2&&Number(row[c+2])===3){hdr=r;c1=c;break;}}}
-      if(hdr<0)continue;
-      // หาแถวชื่อ
-      let nr=-1;for(let r=hdr+1;r<aoa.length;r++){if(aoa[r].some(v=>String(v).replace(/\s+/g,'').includes(name.replace(/\s+/g,'')))){nr=r;break;}}
-      if(nr<0)continue;
-      const n=daysIn($('impMonth').value||ymd(cur).slice(0,7));
-      const rows=[];for(let d=1;d<=n;d++){const c=c1+d-1;rows.push({day:d,code:String(aoa[nr][c]??'').trim(),note:String((aoa[nr+1]||[])[c]??'').trim()});}
-      found=rows;break;
-    }
-    if(!found){toast('ไม่พบแถวชื่อ "'+name+'" ในไฟล์','ลองเช็กการสะกดชื่อ หรือใช้โหมดพิมพ์รหัสแทน');return;}
-    impRows=found;renderImpPreview();toast('อ่านไฟล์สำเร็จ 💞','ตรวจดูก่อนแล้วกดลงปฏิทิน');
-  }catch(err){console.error(err);toast('อ่านไฟล์ไม่ได้','ไฟล์อาจเสียหรือไม่ใช่ Excel/CSV');}
-  e.target.value='';
-};
-
-
-/* --- อ่านจากรูปภาพผ่าน Apps Script → AI --- */
-function shrinkImage(file,maxW){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const cv=document.createElement('canvas');cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);const url=cv.toDataURL('image/jpeg',.88);URL.revokeObjectURL(img.src);res(url);};img.onerror=rej;img.src=URL.createObjectURL(file);});}
-$('impImg').onchange=async e=>{
-  const f=e.target.files[0];if(!f)return;e.target.value='';
-  if(!syncUrl){toast('ยังไม่ได้เชื่อมต่อชีต','กดจุดสถานะบนหัวแอปเพื่อวางลิงก์ก่อน แล้วค่อยอ่านรูป');return;}
-  const st=$('impImgStatus');st.style.display='block';st.textContent='กำลังเตรียมรูป…';
-  try{
-    const dataUrl=await shrinkImage(f,2000);
-    $('impThumb').src=dataUrl;$('impThumb').style.display='block';
-    st.textContent='🤖 AI กำลังอ่านแถวของ "'+($('impName').value||'')+'" รอสักครู่ (10–30 วินาที)…';
-    const r=await fetch(syncUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:SYNC_KEY,action:'ocr',name:($('impName').value||'').trim(),mime:'image/jpeg',image:dataUrl.split(',')[1]}),redirect:'follow'});
-    const j=await r.json();
-    if(j.error==='no_ai_key'){st.textContent='ยังไม่ได้ใส่คีย์ AI ใน Apps Script (GEMINI_KEY หรือ ANTHROPIC_KEY)';return;}
-    if(j.error){st.textContent='อ่านไม่สำเร็จ: '+(j.detail||j.error);return;}
-    const res=j.result||{};const days=Array.isArray(res.days)?res.days:[];
-    if(!days.length){st.textContent='AI ไม่พบแถวชื่อนี้ในรูป ลองถ่ายให้ชัดขึ้นหรือเช็กชื่อ';return;}
-    if(res.month&&/^\d{4}-\d{2}$/.test(res.month)){let [y,m]=res.month.split('-').map(Number);if(y>2400)y-=543;$('impMonth').value=`${y}-${pad(m)}`;}
-    impRows=days.map((d,i)=>({day:Number(d.day)||i+1,code:String(d.code||'').trim(),note:String(d.note||'').trim()})).sort((a,b)=>a.day-b.day);
-    renderImpPreview();
-    st.textContent='อ่านได้แล้ว ✨ เทียบกับรูปด้านบนก่อนกดลงปฏิทินนะ'+(res.name?' · พบ: '+res.name:'');
-    toast('อ่านรูปสำเร็จ 💞','ตรวจทานทีละวันก่อนลงปฏิทิน');
-  }catch(err){console.error(err);st.textContent='เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง';}
 };
 
 function renderImpPreview(){
@@ -807,7 +767,9 @@ function renderImpPreview(){
     const desc=isBad?'ไม่รู้จักรหัสนี้ แก้ในช่องได้':(sh.type==='OFF'?'💗 หยุด':`<span class="shift ${sh.type}">${esc(shCode(sh))}</span>${shRangeText(date,sh).replace(/\((\d+\/\d+)\) /g,'$1 ')}${r.note?' · '+esc(r.note):''}`);
     h+=`<div class="prow${isBad?' bad':''}"><div class="pd">${r.day}<small>${dow}</small></div><input class="input" data-i="${i}" value="${esc(r.code)}" placeholder="X"><div class="pr">${desc}</div></div>`;
   });
-  $('impPreview').innerHTML=`<div class="prev"><h4>ตรวจสอบก่อนลงปฏิทิน <span>${ok} วันพร้อม${bad?` · <b style="color:var(--danger)">${bad} วันต้องแก้</b>`:''}</span></h4>${h}</div>`;
+  let calcH=0;impRows.forEach(r=>{const sh=r.code?parseCode(r.code):null;if(sh)calcH+=shHours(sh);});calcH=Math.round(calcH);
+  const hoursHtml=impTotal!=null?`<div class="hoursbox ${calcH===impTotal?'ok':'bad'}"><span>ชั่วโมงรวมจากรหัสที่อ่านได้ <b>${calcH}</b> · ในตาราง <b>${impTotal}</b></span><span>${calcH===impTotal?'✅ ตรงกัน น่าจะอ่านถูกทั้งแถว':'⚠️ ไม่ตรง มีบางช่องอ่านผิด ลองไล่เช็กหรือครอปใหม่'}</span></div>`:`<div class="hoursbox"><span>ชั่วโมงรวมจากรหัสที่อ่านได้ <b>${calcH}</b> ชม.</span></div>`;
+  $('impPreview').innerHTML=hoursHtml+`<div class="prev"><h4>ตรวจสอบก่อนลงปฏิทิน <span>${ok} วันพร้อม${bad?` · <b style="color:var(--danger)">${bad} วันต้องแก้</b>`:''}</span></h4>${h}</div>`;
   $('impReplaceWrap').style.display='flex';$('impApply').style.display='flex';$('impApply').disabled=bad>0;
 }
 $('impPreview').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;impRows[+inp.dataset.i].code=inp.value;clearTimeout(window._impT);window._impT=setTimeout(()=>{const pos=inp.dataset.i;renderImpPreview();const again=$('impPreview').querySelector(`input[data-i="${pos}"]`);if(again){again.focus();again.setSelectionRange(again.value.length,again.value.length);}},500);});
@@ -817,7 +779,7 @@ $('impApply').onclick=()=>{
   if(!impRows)return;const ym=$('impMonth').value||ymd(cur).slice(0,7);
   if($('impReplace').checked){Object.keys(state.shifts).forEach(k=>{if(k.startsWith(ym))delete state.shifts[k];});}
   let cnt=0;impRows.forEach(r=>{const sh=r.code?parseCode(r.code):{type:'OFF',code:'X'};if(!sh)return;state.shifts[`${ym}-${pad(r.day)}`]=Object.assign({},sh,{ward:r.note||''});cnt++;});
-  save();const [y,m]=ym.split('-').map(Number);cur=new Date(y,m-1,1);renderCal();closeImp();impRows=null;$('impPreview').innerHTML='';$('impApply').style.display='none';$('impReplaceWrap').style.display='none';$('impText').value='';$('impThumb').style.display='none';$('impImgStatus').style.display='none';
+  save();const [y,m]=ym.split('-').map(Number);cur=new Date(y,m-1,1);renderCal();closeImp();impRows=null;$('impPreview').innerHTML='';$('impApply').style.display='none';$('impReplaceWrap').style.display='none';$('impText').value='';
   toast('ลงตารางเวรแล้ว 💗',`${parseYmd(ym+'-01').toLocaleDateString('th-TH',{month:'long',year:'numeric'})} · ${cnt} วัน`);
 };
 
