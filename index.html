@@ -277,7 +277,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ข้อมูลซิงก์ให้เห็นร่วมกันอัตโนมัติ 💞</div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้เเฟนพี่ใช้งานง่าย 💞</div>
     </div>
   </div>
 </div>
@@ -419,16 +419,21 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
         <div><div class="subhead">เดือนที่นำเข้า</div><input class="input" type="month" id="impMonth"></div>
         <div><div class="subhead">ชื่อในตาราง</div><input class="input" id="impName" value="สุชาดา"></div>
       </div>
-      <div class="seg" id="impSeg"><button data-pane="file" aria-pressed="true">📄 ไฟล์ Excel</button><button data-pane="text" aria-pressed="false">⌨️ พิมพ์รหัส</button></div>
-      <div class="pane active" id="imp-file">
-        <label class="drop" for="impFile"><span style="font-size:28px">📊</span><b>แตะเพื่อเลือกไฟล์ตารางเวร</b><small>.xlsx .xls .csv ที่ รพ. ส่งให้ — ระบบจะหาแถว "<span id="impNameEcho">สุชาดา</span>" เอง</small><input type="file" id="impFile" accept=".xlsx,.xls,.csv" hidden></label>
+      <div class="seg" id="impSeg"><button data-pane="img" aria-pressed="true">📷 รูปภาพ</button><button data-pane="file" aria-pressed="false">📄 Excel</button><button data-pane="text" aria-pressed="false">⌨️ พิมพ์</button></div>
+      <div class="pane active" id="imp-img">
+        <label class="drop" for="impImg" id="impImgDrop"><span style="font-size:28px">📷</span><b>แตะเพื่อเลือกรูปตารางเวร</b><small>ถ่ายจากมือถือหรือรูปที่ รพ. ส่งมาก็ได้ AI จะหาแถว "<span class="impNameEcho">สุชาดา</span>" แล้วอ่านให้</small><input type="file" id="impImg" accept="image/*" hidden></label>
+        <div id="impImgStatus" class="hint" style="display:none;text-align:center"></div>
+        <img id="impThumb" alt="" style="display:none;width:100%;border-radius:14px;border:1px solid var(--line);margin-bottom:10px">
+      </div>
+      <div class="pane" id="imp-file">
+        <label class="drop" for="impFile"><span style="font-size:28px">📊</span><b>แตะเพื่อเลือกไฟล์ตารางเวร</b><small>.xlsx .xls .csv ที่ รพ. ส่งให้ — ระบบจะหาแถว "<span class="impNameEcho">สุชาดา</span>" เอง</small><input type="file" id="impFile" accept=".xlsx,.xls,.csv" hidden></label>
       </div>
       <div class="pane" id="imp-text">
         <textarea class="input" id="impText" rows="3" placeholder="พิมพ์รหัสตามลำดับวันที่ 1 ถึงสิ้นเดือน เว้นวรรคคั่น เช่น&#10;X X X D/N N X D D/N X D* D1/N X D X D D12/N X D D/N X D D X D D1/N X D1/N X D"></textarea>
         <button class="btn full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
       </div>
       <details class="legend-box"><summary>รหัสเวรที่รู้จัก</summary>
-        <div class="codes">X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
+        <div class="codes">เดือนจะอ่านจากหัวตารางให้อัตโนมัติ ถ้าไม่ตรงแก้ที่ช่องเดือนด้านบนได้<br>X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
       </details>
       <div id="impPreview"></div>
       <label class="alarm" style="display:none" id="impReplaceWrap"><span class="alarm-ic">🧹</span><span class="alarm-tx"><b>ล้างเวรเดิมของเดือนนี้ก่อน</b><small>กิจกรรมและงานไม่ถูกลบ</small></span><input type="checkbox" class="switch" id="impReplace" checked></label>
@@ -508,7 +513,7 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = '';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwxMwwpbh9anMW_DAa3eUUngnszOy_m8qfPbGXUZwajXROFvfN9ELCSE518Aa6NBYiT/exec';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
 const SYNC_KEY = 'nongmay-love-2569';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
@@ -546,7 +551,7 @@ async function pushRemote(){
   if(syncDirty){syncDirty=false;pushRemote();}
 }
 function setupSyncPrompt(){
-  const u=prompt('วางลิงก์ Web app จาก Apps Script (ลงท้ายด้วย /exec)\nเว้นว่างแล้วกดตกลงเพื่อปิดการซิงก์',syncUrl);
+  const u=prompt('https://script.google.com/macros/s/AKfycbwxMwwpbh9anMW_DAa3eUUngnszOy_m8qfPbGXUZwajXROFvfN9ELCSE518Aa6NBYiT/exec',syncUrl);
   if(u===null)return;
   syncUrl=u.trim();localStorage.setItem('wen.syncUrl',syncUrl);
   if(syncUrl){toast('เชื่อมต่อชีตแล้ว 💞');pullRemote(true);}else{setSyncStatus('off','ยังไม่ได้เชื่อมต่อชีต');toast('ปิดการซิงก์แล้ว');}
@@ -726,7 +731,7 @@ function closeImp(){$('impWrap').classList.remove('open');document.body.style.ov
 $('importBtn').onclick=openImp;
 document.querySelectorAll('[data-close="imp"]').forEach(el=>el.onclick=closeImp);
 $('impSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('impSeg').children].forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('#impWrap .pane').forEach(x=>x.classList.toggle('active',x.id==='imp-'+b.dataset.pane));};
-$('impName').oninput=e=>{$('impNameEcho').textContent=e.target.value||'…';};
+$('impName').oninput=e=>{document.querySelectorAll('.impNameEcho').forEach(x=>x.textContent=e.target.value||'…');};
 function daysIn(ym){const [y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();}
 
 $('impParse').onclick=()=>{
@@ -760,6 +765,31 @@ $('impFile').onchange=async e=>{
   e.target.value='';
 };
 
+
+/* --- อ่านจากรูปภาพผ่าน Apps Script → AI --- */
+function shrinkImage(file,maxW){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const sc=Math.min(1,maxW/img.width);const cv=document.createElement('canvas');cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);const url=cv.toDataURL('image/jpeg',.88);URL.revokeObjectURL(img.src);res(url);};img.onerror=rej;img.src=URL.createObjectURL(file);});}
+$('impImg').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;e.target.value='';
+  if(!syncUrl){toast('ยังไม่ได้เชื่อมต่อชีต','กดจุดสถานะบนหัวแอปเพื่อวางลิงก์ก่อน แล้วค่อยอ่านรูป');return;}
+  const st=$('impImgStatus');st.style.display='block';st.textContent='กำลังเตรียมรูป…';
+  try{
+    const dataUrl=await shrinkImage(f,2000);
+    $('impThumb').src=dataUrl;$('impThumb').style.display='block';
+    st.textContent='🤖 AI กำลังอ่านแถวของ "'+($('impName').value||'')+'" รอสักครู่ (10–30 วินาที)…';
+    const r=await fetch(syncUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:SYNC_KEY,action:'ocr',name:($('impName').value||'').trim(),mime:'image/jpeg',image:dataUrl.split(',')[1]}),redirect:'follow'});
+    const j=await r.json();
+    if(j.error==='no_ai_key'){st.textContent='ยังไม่ได้ใส่คีย์ AI ใน Apps Script (GEMINI_KEY หรือ ANTHROPIC_KEY)';return;}
+    if(j.error){st.textContent='อ่านไม่สำเร็จ: '+(j.detail||j.error);return;}
+    const res=j.result||{};const days=Array.isArray(res.days)?res.days:[];
+    if(!days.length){st.textContent='AI ไม่พบแถวชื่อนี้ในรูป ลองถ่ายให้ชัดขึ้นหรือเช็กชื่อ';return;}
+    if(res.month&&/^\d{4}-\d{2}$/.test(res.month)){let [y,m]=res.month.split('-').map(Number);if(y>2400)y-=543;$('impMonth').value=`${y}-${pad(m)}`;}
+    impRows=days.map((d,i)=>({day:Number(d.day)||i+1,code:String(d.code||'').trim(),note:String(d.note||'').trim()})).sort((a,b)=>a.day-b.day);
+    renderImpPreview();
+    st.textContent='อ่านได้แล้ว ✨ เทียบกับรูปด้านบนก่อนกดลงปฏิทินนะ'+(res.name?' · พบ: '+res.name:'');
+    toast('อ่านรูปสำเร็จ 💞','ตรวจทานทีละวันก่อนลงปฏิทิน');
+  }catch(err){console.error(err);st.textContent='เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง';}
+};
+
 function renderImpPreview(){
   const ym=$('impMonth').value||ymd(cur).slice(0,7);const n=daysIn(ym);
   while(impRows.length<n)impRows.push({day:impRows.length+1,code:'',note:''});
@@ -782,7 +812,7 @@ $('impApply').onclick=()=>{
   if(!impRows)return;const ym=$('impMonth').value||ymd(cur).slice(0,7);
   if($('impReplace').checked){Object.keys(state.shifts).forEach(k=>{if(k.startsWith(ym))delete state.shifts[k];});}
   let cnt=0;impRows.forEach(r=>{const sh=r.code?parseCode(r.code):{type:'OFF',code:'X'};if(!sh)return;state.shifts[`${ym}-${pad(r.day)}`]=Object.assign({},sh,{ward:r.note||''});cnt++;});
-  save();const [y,m]=ym.split('-').map(Number);cur=new Date(y,m-1,1);renderCal();closeImp();impRows=null;$('impPreview').innerHTML='';$('impApply').style.display='none';$('impReplaceWrap').style.display='none';$('impText').value='';
+  save();const [y,m]=ym.split('-').map(Number);cur=new Date(y,m-1,1);renderCal();closeImp();impRows=null;$('impPreview').innerHTML='';$('impApply').style.display='none';$('impReplaceWrap').style.display='none';$('impText').value='';$('impThumb').style.display='none';$('impImgStatus').style.display='none';
   toast('ลงตารางเวรแล้ว 💗',`${parseYmd(ym+'-01').toLocaleDateString('th-TH',{month:'long',year:'numeric'})} · ${cnt} วัน`);
 };
 
