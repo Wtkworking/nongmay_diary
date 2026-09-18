@@ -513,7 +513,7 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = 'https://script.google.com/macros/s/AKfycbwxMwwpbh9anMW_DAa3eUUngnszOy_m8qfPbGXUZwajXROFvfN9ELCSE518Aa6NBYiT/exec';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbxkvou8CfGyKn32hLN75tu7-a2gMTEDTOC-zEscu0iQnf6ZfFSm22UwER6Bg5z4is6s/exec';                       // เช่น 'https://script.google.com/macros/s/AKfycb.../exec'
 const SYNC_KEY = 'nmay&pgolf';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
