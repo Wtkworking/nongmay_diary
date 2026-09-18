@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="2.5">
+<meta name="app-version" content="2.6">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -119,6 +119,14 @@ header{background:linear-gradient(180deg,#FFFFFF,#FFF7FA);border-bottom-color:va
 .post-pick button{border:2px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 10px 5px 6px;font-size:12.5px;display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
 .post-pick button i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .post-pick button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand);font-weight:600}
+.avatar{overflow:hidden;position:relative;padding:0}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.avatar.big{width:96px;height:96px;font-size:40px;flex:none}
+.prof-top{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.crop-wrap{display:flex;justify-content:center;margin:6px 0}
+#pCv{border-radius:50%;box-shadow:0 0 0 4px var(--brand-soft),0 0 0 9999px rgba(240,97,156,.06);touch-action:none;cursor:grab;background:var(--bg);max-width:100%}
+.zoom-row{display:flex;align-items:center;gap:10px;margin:10px 0 12px}
+.zoom-row input{flex:1;accent-color:var(--brand)}
 .sparkle{font-size:13px;color:var(--ink-3);text-align:center;margin:4px 0 0}
 .arch textarea{border-radius:14px;background:#FFF8FB}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) header,:root:not([data-theme="light"]) .sheet{background:var(--paper)} :root:not([data-theme="light"]) .day.today{background:var(--paper)} :root:not([data-theme="light"]) .arch textarea{background:transparent}}
@@ -307,7 +315,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.5</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.6</span></div>
     </div>
   </div>
 </div>
@@ -318,7 +326,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <div class="spacer"></div>
     <button class="btn small ghost" id="syncDot" aria-label="สถานะการซิงก์" data-st="off"><span class="sd"></span></button>
     <button class="btn small ghost bell" id="bellBtn" aria-label="การแจ้งเตือน">🔔<span class="dot" id="bellDot" hidden></span></button>
-    <button class="avatar" id="avatar" aria-label="บัญชี">?</button>
+    <button class="avatar" id="avatar" aria-label="โปรไฟล์"><span id="avatarTx">💗</span><img id="avatarImg" alt="" hidden></button>
   </div></header>
 
   <main>
@@ -456,6 +464,30 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
   </div>
 </div>
 
+<!-- profile sheet -->
+<div id="profWrap" class="wrap" role="dialog" aria-modal="true">
+  <div class="scrim" data-close="prof"></div>
+  <div class="sheet">
+    <div class="grip"></div>
+    <div class="sheet-head"><div style="flex:1"><h3>💗 โปรไฟล์</h3><p>เปลี่ยนรูปมุมขวาบนได้ตามใจ</p></div><button class="btn small ghost" data-close="prof" aria-label="ปิด">✕</button></div>
+    <div class="sheet-body">
+      <div class="prof-top">
+        <div class="avatar big" id="profPreview"><span>💗</span><img alt="" hidden></div>
+        <div style="flex:1">
+          <label class="btn primary full" for="profFile">📷 เลือกรูป<input type="file" id="profFile" accept="image/*" hidden></label>
+          <button class="btn full" id="profRemove" style="margin-top:8px">ใช้หัวใจแทนรูป</button>
+        </div>
+      </div>
+      <div id="cropUI" style="display:none">
+        <div class="subhead">ลากรูปเพื่อเลื่อน · ใช้แถบด้านล่างเพื่อซูม</div>
+        <div class="crop-wrap"><canvas id="pCv" width="280" height="280"></canvas></div>
+        <div class="zoom-row"><span>➖</span><input type="range" id="pZoom" min="1" max="4" step="0.01" value="1"><span>➕</span></div>
+        <button class="btn primary full" id="profSave">บันทึกรูปโปรไฟล์ 💗</button>
+      </div>
+      <button class="btn ghost full" id="profLogout" style="margin-top:14px;color:var(--ink-3)">กลับไปหน้าแรก</button>
+    </div>
+  </div>
+</div>
 <div id="toasts" aria-live="polite"></div>
 
 <script>
@@ -506,7 +538,7 @@ function parseCode(raw){
   return null;
 }
 const LS_KEY='wen.v1';
-let state={shifts:{},events:[],todos:[],fired:{},user:null,alarm:true,updatedAt:0};
+let state={shifts:{},events:[],todos:[],fired:{},user:null,alarm:true,avatar:'',updatedAt:0};
 let saveTimer=null;
 
 const uidGen=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
@@ -526,9 +558,26 @@ function save(){state.updatedAt=Date.now();clearTimeout(saveTimer);saveTimer=set
 },400);}
 
 /* ===== login ===== */
-function showApp(name){state.user=name;$('avatar').textContent='💗';$('login').style.display='none';$('app').style.display='block';renderAll();startReminderLoop();}
+function renderAvatar(){const has=!!state.avatar;$('avatarImg').hidden=!has;$('avatarTx').hidden=has;if(has)$('avatarImg').src=state.avatar;const pv=$('profPreview');pv.querySelector('img').hidden=!has;pv.querySelector('span').hidden=has;if(has)pv.querySelector('img').src=state.avatar;}
+function showApp(name){state.user=name;renderAvatar();$('login').style.display='none';$('app').style.display='block';renderAll();startReminderLoop();}
 $('loginBtn').onclick=()=>{state.user='น้องเมย์';try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}showApp('น้องเมย์');};
-$('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? ข้อมูลทั้งหมดยังอยู่ครบนะ')){state.user=null;try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}$('app').style.display='none';$('login').style.display='grid';}};
+/* ===== โปรไฟล์ / รูปมุมขวาบน ===== */
+$('avatar').onclick=()=>{renderAvatar();$('cropUI').style.display='none';$('profWrap').classList.add('open');document.body.style.overflow='hidden';};
+document.querySelectorAll('[data-close="prof"]').forEach(el=>el.onclick=()=>{$('profWrap').classList.remove('open');document.body.style.overflow='';});
+$('profLogout').onclick=()=>{if(confirm('กลับไปหน้าแรก? ข้อมูลทั้งหมดยังอยู่ครบนะ')){state.user=null;try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}$('profWrap').classList.remove('open');document.body.style.overflow='';$('app').style.display='none';$('login').style.display='grid';}};
+$('profRemove').onclick=()=>{state.avatar='';save();renderAvatar();$('cropUI').style.display='none';toast('กลับมาใช้หัวใจแล้ว 💗');};
+let pImg=null,pZoom=1,pX=0,pY=0,pDrag=null;
+$('profFile').onchange=e=>{const f=e.target.files[0];if(!f)return;e.target.value='';const img=new Image();img.onload=()=>{pImg=img;pZoom=1;pX=0;pY=0;$('pZoom').value=1;$('cropUI').style.display='block';drawCrop();URL.revokeObjectURL(img.src);};img.src=URL.createObjectURL(f);};
+function baseScale(){const cv=$('pCv');return Math.max(cv.width/pImg.width,cv.height/pImg.height);}
+function clampPan(){const cv=$('pCv');const sc=baseScale()*pZoom;const w=pImg.width*sc,h=pImg.height*sc;const mx=Math.max(0,(w-cv.width)/2),my=Math.max(0,(h-cv.height)/2);pX=Math.min(mx,Math.max(-mx,pX));pY=Math.min(my,Math.max(-my,pY));}
+function drawCrop(target,size){const cv=target||$('pCv');const S=size||cv.width;const ctx=cv.getContext('2d');ctx.clearRect(0,0,S,S);if(!pImg)return;clampPan();const k=S/$('pCv').width;const sc=baseScale()*pZoom*k;const w=pImg.width*sc,h=pImg.height*sc;ctx.imageSmoothingQuality='high';ctx.drawImage(pImg,(S-w)/2+pX*k,(S-h)/2+pY*k,w,h);}
+$('pZoom').oninput=e=>{pZoom=Number(e.target.value);drawCrop();};
+const pcv=()=>$('pCv');
+pcv().addEventListener('pointerdown',ev=>{ev.preventDefault();pDrag={x:ev.clientX,y:ev.clientY,px:pX,py:pY};pcv().setPointerCapture(ev.pointerId);});
+pcv().addEventListener('pointermove',ev=>{if(!pDrag)return;const r=pcv().getBoundingClientRect();const k=pcv().width/r.width;pX=pDrag.px+(ev.clientX-pDrag.x)*k;pY=pDrag.py+(ev.clientY-pDrag.y)*k;drawCrop();});
+pcv().addEventListener('pointerup',()=>pDrag=null);pcv().addEventListener('pointercancel',()=>pDrag=null);
+pcv().addEventListener('wheel',ev=>{ev.preventDefault();pZoom=Math.min(4,Math.max(1,pZoom*(ev.deltaY<0?1.06:0.94)));$('pZoom').value=pZoom;drawCrop();},{passive:false});
+$('profSave').onclick=()=>{if(!pImg)return;const out=document.createElement('canvas');out.width=out.height=200;drawCrop(out,200);state.avatar=out.toDataURL('image/jpeg',.85);save();renderAvatar();$('cropUI').style.display='none';toast('เปลี่ยนรูปโปรไฟล์แล้ว 💗');};
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
@@ -541,9 +590,9 @@ let syncBusy=false, syncDirty=false;
 
 function setSyncStatus(st,msg){const el=$('syncDot');if(!el)return;el.dataset.st=st;el.title=msg||'';}
 function applyRemote(remote){
-  state.shifts=remote.shifts||{};state.events=remote.events||[];state.todos=remote.todos||[];state.alarm=remote.alarm!==false;state.updatedAt=remote.updatedAt||0;
+  state.shifts=remote.shifts||{};state.events=remote.events||[];state.todos=remote.todos||[];state.alarm=remote.alarm!==false;state.avatar=remote.avatar||'';state.updatedAt=remote.updatedAt||0;
   try{localStorage.setItem(LS_KEY,JSON.stringify(state));}catch(e){}
-  if($('app').style.display==='block'){renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();}
+  if($('app').style.display==='block'){renderAvatar();renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();}
 }
 async function pullRemote(showToast){
   if(!syncUrl)return;
@@ -561,7 +610,7 @@ async function pushRemote(){
   if(syncBusy){syncDirty=true;return;}
   syncBusy=true;setSyncStatus('busy','กำลังบันทึกขึ้นชีต…');
   try{
-    const payload={key:SYNC_KEY,state:{shifts:state.shifts,events:state.events,todos:state.todos,alarm:state.alarm!==false,updatedAt:state.updatedAt}};
+    const payload={key:SYNC_KEY,state:{shifts:state.shifts,events:state.events,todos:state.todos,alarm:state.alarm!==false,avatar:state.avatar||'',updatedAt:state.updatedAt}};
     const r=await fetch(syncUrl,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),redirect:'follow'});
     const j=await r.json();
     if(j.conflict&&j.state){applyRemote(j.state);toast('อีกคนเพิ่งบันทึก จึงโหลดข้อมูลล่าสุดมาให้ 💞','ลองแก้อีกครั้งได้เลย');}
