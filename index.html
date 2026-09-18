@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="2.1">
+<meta name="app-version" content="2.5">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -196,9 +196,10 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
 .shift.DN{background:linear-gradient(135deg,var(--day) 0 50%,var(--night) 50% 100%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .shift.OFF{background:var(--off);color:var(--off-ink);font-weight:600}
 .shift.none{background:transparent;border:1px dashed var(--line-2);color:transparent}
-.post{display:flex;align-items:center;justify-content:center;gap:3px;font-size:8.5px;color:var(--ink-2);line-height:1.1;max-width:100%}
+.post{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:8px;color:var(--ink);line-height:1.1;max-width:100%;width:100%}
+.post .sw{display:flex;gap:2px}
 .post i{width:8px;height:8px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,.15);flex:none}
-.post b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.post b{font-weight:600;white-space:normal;text-align:center;word-break:break-word;width:100%}
 .stime em{font-style:normal;color:var(--brand);font-weight:600}
 .stime{font-size:9px;line-height:1.2;color:var(--ink-2);text-align:center;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
 .pills{display:flex;flex-direction:column;gap:2px;width:100%;margin-top:auto}
@@ -289,7 +290,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
 .toast b{display:block}
 
 @media (min-width:700px){
-  .day{min-height:130px}
+  .day{min-height:140px}
   .post{font-size:10px}
   .pill{font-size:11px}
   .stime{font-size:10.5px}
@@ -306,7 +307,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.1</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.5</span></div>
     </div>
   </div>
 </div>
@@ -333,7 +334,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
       <div class="weekdays"><div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div></div>
       <div class="grid" id="grid"></div>
       <details class="legend-box" style="margin-top:10px"><summary>รหัสเวรทั้งหมด</summary>
-        <div class="codes">☀️ D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้<br>📍 สีตำแหน่ง: <i style="background:#FF3DDA"></i> Inc.DAY <i style="background:#38E1FF"></i> Inc.NIGHT <i style="background:#7ED321"></i> Sx. <i style="background:#FF2D2D"></i> Ortho. <i style="background:#FFE600"></i> GP. <i style="background:#B39DDB"></i> UroSx. <i style="background:#C6E37A"></i> Vital sign <i style="background:#0FA958"></i> เจาะเลือด</div>
+        <div class="codes">☀️ D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้<br>📍 สีตำแหน่ง: <i style="background:#FF3DDA"></i> Inc.DAY <i style="background:#38E1FF"></i> Inc.NIGHT <i style="background:#FC9254"></i> Sx. <i style="background:#FF2D2D"></i> Ortho. <i style="background:#FFE600"></i> GP. <i style="background:#B39DDB"></i> UroSx. <i style="background:#99D154"></i> Vital sign <i style="background:#0FA958"></i> เจาะเลือด</div>
       </details>
       <p class="sparkle">✨ แตะวันเพื่อลงเวรหรือเพิ่มกิจกรรม ✨</p>
     </section>
@@ -441,7 +442,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
         <div><div class="subhead">เดือนที่นำเข้า</div><input class="input" type="month" id="impMonth"></div>
         <div><div class="subhead">ชื่อในตาราง</div><input class="input" id="impName" value="สุชาดา"></div>
       </div>
-      <a class="readerlink" id="openReader" href="reader.html" target="_blank"><span style="font-size:26px">📷</span><span style="flex:1"><b>อ่านรหัสจากรูปตารางเวร</b><small>เปิดหน้า Reader → เลือกรูป → ก๊อปรหัส → กดกลับมาวางที่นี่</small></span><span>›</span></a>
+      <a class="readerlink" id="openProject" href="https://claude.ai/project/01a0b485-a0f6-7152-8795-4756127f971f" target="_blank" rel="noopener"><span style="font-size:26px">🤖</span><span style="flex:1"><b>แปลงรูปตารางเวรเป็นรหัสด้วย Claude</b><small>เปิด Project → แนบรูปตารางเวร → กดส่ง → ก๊อปบรรทัดรหัสกลับมาวางด้านล่าง</small></span><span>›</span></a>
       <div class="subhead">วางรหัสเวรตามลำดับวันที่ 1 ถึงสิ้นเดือน</div>
       <textarea class="input" id="impText" rows="3" placeholder="เช่น X X X D/N N X D D/N X D D1* X X D D D12/N X D D/N X D D D D1/N X D D1/N X D D1/N"></textarea>
       <button class="btn primary full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
@@ -476,7 +477,7 @@ const CODES={
   'D1/N':{type:'DN',start:'09:00',end:'08:00'},
   'D12/N':{type:'DN',start:'12:00',end:'08:00'},
 };
-const POSTS={INC_D:{label:'Inc. DAY',color:'#FF3DDA'},INC_N:{label:'Inc. NIGHT',color:'#38E1FF'},SX:{label:'หน้าห้อง Sx.',color:'#7ED321'},ORTHO:{label:'หน้าห้อง Ortho.',color:'#FF2D2D'},GP:{label:'หน้าห้อง GP.',color:'#FFE600'},URO:{label:'หน้าห้อง UroSx.',color:'#B39DDB'},VS:{label:'วัด Vital sign',color:'#C6E37A'},LAB:{label:'เจาะเลือดห้องแลป',color:'#0FA958'}};
+const POSTS={INC_D:{label:'Inc. DAY',color:'#FF3DDA'},INC_N:{label:'Inc. NIGHT',color:'#38E1FF'},SX:{label:'หน้าห้อง Sx.',color:'#FC9254'},ORTHO:{label:'หน้าห้อง Ortho.',color:'#FF2D2D'},GP:{label:'หน้าห้อง GP.',color:'#FFE600'},URO:{label:'หน้าห้อง UroSx.',color:'#B39DDB'},VS:{label:'วัด Vital sign',color:'#99D154'},LAB:{label:'เจาะเลือดห้องแลป',color:'#0FA958'}};
 const POST_ORDER=['INC_D','INC_N','SX','ORTHO','GP','URO','VS','LAB'];
 const postLabel=k=>POSTS[k]?POSTS[k].label:'';
 function splitToken(tok){const [code,rest]=String(tok).split('@');let post='',postN='';if(rest){const parts=rest.toUpperCase().split('+');post=POSTS[parts[0]]?parts[0]:'';postN=parts[1]&&POSTS[parts[1]]?parts[1]:'';}return{code:code||'',post,postN};}
@@ -531,8 +532,10 @@ $('avatar').onclick=()=>{if(confirm('กลับไปหน้าแรก? �
 $('syncDot').onclick=()=>{const st=$('syncDot').dataset.st;if(st==='off'||confirm(($('syncDot').title||'')+'\n\nต้องการเปลี่ยนลิงก์ชีตไหม?'))setupSyncPrompt();};
 /* ===== ซิงก์กับ Google Sheet =====
    วาง URL ของ Web app จาก Apps Script ตรง SYNC_URL และรหัสลับให้ตรงกับในสคริปต์ */
-const SYNC_URL = 'https://script.google.com/macros/s/AKfycbxbAe9clTGz1BHc7KBzCG3w2dPsgdwypCKd2YKOeLl5CIDXlrXLGXnxQhYuTfQIJ8Na/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
+const SYNC_URL = 'https://script.google.com/macros/s/AKfycbz5QeSJrl9tLTqhVoFO6MiSR_OES3tSIXBaUFalc6sW7mfKEiNbNwTDIJb1KuPszjmW/exec'; // ลิงก์ Web app ล่าสุดจาก Deploy → Manage deployments
 const SYNC_KEY = 'nmay&pgolf';
+// ลิงก์ Claude Project สำหรับแปลงรูปตารางเวรเป็นรหัส (เปิด Project แล้วก๊อป URL จากแถบที่อยู่มาวาง)
+const PROJECT_URL = 'https://claude.ai/project/01a0b485-a0f6-7152-8795-4756127f971f';
 let syncUrl = SYNC_URL || (localStorage.getItem('wen.syncUrl') || '');
 let syncBusy=false, syncDirty=false;
 
@@ -619,7 +622,7 @@ function renderCal(){
     if(!other&&sh)cnt[sh.type]=(cnt[sh.type]||0)+1;
     const r=sh?shRange(s,sh):null;
     const timeHtml=r?(r.sd===r.ed?`<span class="stime">${r.st.replace(':','.')}<br><em>ถึง</em><br>${r.et.replace(':','.')}</span>`:`<span class="stime">${dm(r.sd)} ${r.st.replace(':','.')}<br><em>ถึง</em><br>${dm(r.ed)} ${r.et.replace(':','.')}</span>`):'';
-    const postHtml=sh&&(sh.post||sh.postN)?`<span class="post">${sh.post?`<i style="background:${POSTS[sh.post].color}"></i>`:''}${sh.postN?`<i style="background:${POSTS[sh.postN].color}"></i>`:''}<b>${esc(sh.post?postLabel(sh.post).replace('หน้าห้อง ','').replace('Inc. ','Inc.'):postLabel(sh.postN).replace('Inc. ','Inc.'))}</b></span>`:'';
+    const postHtml=sh&&(sh.post||sh.postN)?`<span class="post"><span class="sw">${sh.post?`<i style="background:${POSTS[sh.post].color}"></i>`:''}${sh.postN?`<i style="background:${POSTS[sh.postN].color}"></i>`:''}</span><b>${esc(sh.post?postLabel(sh.post):postLabel(sh.postN))}</b></span>`:'';
     const shiftHtml=sh?`<span class="shift ${sh.type}">${sh.type==='OFF'?'หยุด':esc(shCode(sh))}</span>${postHtml}${timeHtml}`:`<span class="shift none">·</span>`;
     const items=[...ev.map(e=>({k:'e',...e})),...td.map(x=>({k:'t',...x}))];
     const maxShow=sh?(sh.type==='OFF'?2:1):3;
@@ -764,7 +767,7 @@ let impRows=null,impTotal=null; // [{day,code,note}]
 function openImp(){$('impMonth').value=ymd(cur).slice(0,7);$('impWrap').classList.add('open');document.body.style.overflow='hidden';}
 function closeImp(){$('impWrap').classList.remove('open');document.body.style.overflow='';}
 $('importBtn').onclick=openImp;
-$('openReader').onclick=()=>{$('openReader').href='reader.html?name='+encodeURIComponent($('impName').value||'')+'&month='+encodeURIComponent($('impMonth').value||ymd(cur).slice(0,7));};
+if(PROJECT_URL)$('openProject').href=PROJECT_URL;
 (function(){const q=new URLSearchParams(location.search);const codes=q.get('codes');if(!codes)return;
   history.replaceState(null,'',location.pathname);
   const m=q.get('month');if(m&&/^\d{4}-\d{2}$/.test(m)){const [y,mm]=m.split('-').map(Number);cur=new Date(y,mm-1,1);}
