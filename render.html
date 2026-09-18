@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="app-version" content="r1.0">
+<meta name="app-version" content="r1.1">
 <title>อ่านตารางเวร 💗 NongMay Reader</title>
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -81,7 +81,8 @@ h1::before{content:"💗 "}
     <div class="subhead">รหัสเวรของ <span class="nm">สุชาดา</span> <span id="foundName" style="color:var(--ink-3);font-weight:400"></span></div>
     <div class="result" id="result"></div>
     <div class="hours" id="hours"></div>
-    <div class="row"><button class="btn primary" id="copy">📋 ก๊อปรหัส</button><a class="btn" id="openApp" href="index.html" target="_blank">💗 เปิด NongMay Diary</a></div>
+    <div class="row"><button class="btn" id="copy">📋 ก๊อปรหัส</button><button class="btn primary" id="back">💗 กลับไปลงปฏิทิน</button></div>
+    <div class="legend" style="margin-top:6px;text-align:center">ปุ่มชมพูจะพารหัสกลับไปที่แอปให้เอง ไม่ต้องก๊อปวางก็ได้</div>
     <div class="subhead" style="margin-top:12px">ตรวจทีละวัน (แก้ในช่องได้ รหัสด้านบนจะอัปเดตเอง)</div>
     <div class="days" id="days"></div>
     <div class="legend">💡 วางรหัสในแอปที่ 📥 นำเข้า → ⌨️ พิมพ์ → อ่านรหัส<br>รหัส: X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N · D1/N · D12/N</div>
@@ -105,6 +106,7 @@ $('url').value=localStorage.getItem('reader.url')||DEFAULT_URL;$('key').value=lo
 $('url').onchange=e=>localStorage.setItem('reader.url',e.target.value.trim());$('key').onchange=e=>localStorage.setItem('reader.key',e.target.value.trim());
 const now=new Date();$('month').value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
 $('name').oninput=e=>document.querySelectorAll('.nm').forEach(x=>x.textContent=e.target.value||'…');
+(function(){const q=new URLSearchParams(location.search);if(q.get('name')){$('name').value=q.get('name');document.querySelectorAll('.nm').forEach(x=>x.textContent=q.get('name'));}if(q.get('month')&&/^\d{4}-\d{2}$/.test(q.get('month')))$('month').value=q.get('month');})();
 
 /* ===== รหัสเวร ===== */
 const CODES={'X':{type:'OFF'},'D':{type:'D',start:'08:00',end:'20:00'},'D*':{type:'D',start:'08:00',end:'22:00'},'ข':{type:'D',start:'08:00',end:'17:00'},'D1':{type:'D',start:'09:00',end:'20:00'},'D1*':{type:'D',start:'09:00',end:'22:00'},'D12':{type:'D',start:'12:00',end:'20:00'},'D12*':{type:'D',start:'12:00',end:'22:00'},'N':{type:'N',start:'20:00',end:'08:00'},'D/N':{type:'DN',start:'08:00',end:'08:00'},'D1/N':{type:'DN',start:'09:00',end:'08:00'},'D12/N':{type:'DN',start:'12:00',end:'08:00'}};
@@ -170,6 +172,7 @@ function render(){
   if(bad){hb.className='hours bad';hb.innerHTML=`<span>มี <b>${bad}</b> ช่องที่ไม่รู้จักรหัส</span><span>แก้ในช่องสีแดงด้านล่าง</span>`;}
 }
 $('days').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;rows[+inp.dataset.i].code=inp.value;clearTimeout(window._t);window._t=setTimeout(()=>{const i=inp.dataset.i;render();const a=$('days').querySelector(`input[data-i="${i}"]`);if(a){a.focus();}},600);});
+$('back').onclick=()=>{const codes=rows.map(r=>r.code||'X').join(' ');location.href='index.html?codes='+encodeURIComponent(codes)+'&month='+encodeURIComponent($('month').value)+(total!=null?'&total='+total:'');};
 $('copy').onclick=async()=>{const t=$('result').textContent;try{await navigator.clipboard.writeText(t);}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}const el=$('toast');el.textContent='ก๊อปรหัสแล้ว 💗 ไปวางในแอปได้เลย';el.style.display='block';setTimeout(()=>el.style.display='none',2500);};
 </script>
 </body>
