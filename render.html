@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="app-version" content="r1.0">
+<title>อ่านตารางเวร 💗 NongMay Reader</title>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF2F7;--paper:#fff;--ink:#4A2438;--ink-2:#8A5A73;--ink-3:#BE93A9;--line:#FFD9E7;--line-2:#F9BFD5;--brand:#F0619C;--brand-soft:#FFE3EE;--ok:#59B98E;--danger:#E0507A;--day:#FFD27A;--day-ink:#6B4A00;--night:#A99CFF;--off:#FFD7E6;--off-ink:#C2497E;--card:0 4px 14px rgba(240,97,156,.10)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#251A22;--paper:#31222D;--ink:#FFE9F2;--ink-2:#E2B4CA;--ink-3:#A97F95;--line:#4A3241;--line-2:#5E3F52;--brand:#FF7EB3;--brand-soft:#4A2A3C;--off:#4A2A3C;--off-ink:#FFB2D1;--card:0 4px 14px rgba(0,0,0,.3)}}
+:root[data-theme="dark"]{--bg:#251A22;--paper:#31222D;--ink:#FFE9F2;--ink-2:#E2B4CA;--ink-3:#A97F95;--line:#4A3241;--line-2:#5E3F52;--brand:#FF7EB3;--brand-soft:#4A2A3C;--off:#4A2A3C;--off-ink:#FFB2D1;--card:0 4px 14px rgba(0,0,0,.3)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Thai",system-ui,sans-serif;font-size:15px;line-height:1.5;background-image:radial-gradient(circle at 15% 8%,rgba(255,126,179,.14),transparent 30%),radial-gradient(circle at 90% 90%,rgba(169,156,255,.14),transparent 35%)}
+main{max-width:640px;margin:0 auto;padding:18px 14px 60px}
+h1{font-family:Mali,sans-serif;color:var(--brand);font-size:24px;margin:6px 0 2px}
+h1::before{content:"💗 "}
+.sub{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:var(--card);margin-bottom:12px}
+.subhead{font-size:13px;color:var(--ink-3);margin:6px 0 4px;font-weight:600}
+.input{width:100%;padding:11px 13px;border:1px solid var(--line-2);border-radius:14px;background:var(--paper);color:var(--ink);font:inherit;min-height:46px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{border:1px solid var(--line-2);background:var(--paper);border-radius:999px;padding:11px 16px;font:inherit;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;cursor:pointer}
+.btn.primary{background:linear-gradient(135deg,#FF8FB8,#F0619C);border:0;color:#fff;font-weight:600;box-shadow:0 6px 16px rgba(240,97,156,.35)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.full{width:100%}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;border:2px dashed var(--line-2);border-radius:18px;padding:22px 14px;background:var(--bg);cursor:pointer}
+.drop small{color:var(--ink-2);font-size:12.5px}
+.stage{position:relative;width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#000;touch-action:none;user-select:none;margin-top:8px}
+.stage canvas{display:block;width:100%;height:auto}
+#rect{position:absolute;border:2px solid var(--brand);background:rgba(240,97,156,.18);box-shadow:0 0 0 9999px rgba(0,0,0,.35);display:none;pointer-events:none}
+.opt{display:flex;align-items:center;gap:12px;background:var(--brand-soft);border-radius:16px;padding:10px 14px;margin-top:8px;cursor:pointer}
+.opt b{display:block;font-weight:600;font-size:14px}.opt small{color:var(--ink-2);font-size:12.5px}
+.opt span.tx{flex:1}
+.switch{appearance:none;width:46px;height:26px;border-radius:999px;background:var(--line-2);position:relative;margin:0;cursor:pointer;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.switch:checked{background:var(--brand)}.switch:checked::after{left:23px}
+.status{text-align:center;color:var(--ink-2);font-size:14px;margin:10px 0}
+.result{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;word-break:break-word;line-height:1.7;min-height:52px}
+.hours{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0;font-size:13px}
+.hours b{font-size:16px}.hours.ok{border-color:var(--ok)}.hours.bad{border-color:var(--danger);color:var(--danger)}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.d{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 4px;text-align:center}
+.d small{display:block;color:var(--ink-3);font-size:10.5px}
+.d input{width:100%;border:0;background:transparent;text-align:center;font:inherit;font-weight:700;color:var(--ink);padding:2px 0}
+.d.OFF input{color:var(--off-ink)}.d.N input{color:#5b4bd6}.d.DN input{color:#8A3FB8}
+.d.bad{border-color:var(--danger)}.d.bad input{color:var(--danger)}
+.d.diff{background:#FFF3C4;border-color:#E2B93B}
+.d .note{font-size:9.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pieces{display:flex;gap:6px;margin-top:8px}.pieces img{width:50%;border-radius:10px;border:1px solid var(--line)}
+.legend{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.6}
+.link{color:var(--brand);font-weight:600;text-decoration:none}
+.toast{position:fixed;left:14px;right:14px;bottom:20px;background:linear-gradient(135deg,#FF8FB8,#F0619C);color:#fff;padding:12px 16px;border-radius:16px;text-align:center;max-width:420px;margin:0 auto;font-weight:600;display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>อ่านตารางเวร</h1>
+  <p class="sub">เลือกรูปตารางเวรจาก รพ. → ลากกรอบครอบแถวของคุณ → ได้รหัสไปวางในแอป NongMay Diary</p>
+
+  <div class="card">
+    <div class="row">
+      <div><div class="subhead">ชื่อในตาราง</div><input class="input" id="name" value="สุชาดา"></div>
+      <div><div class="subhead">เดือน</div><input class="input" type="month" id="month"></div>
+    </div>
+    <div class="subhead" style="margin-top:10px">รูปตารางเวร</div>
+    <label class="drop" for="file"><span style="font-size:30px">📷</span><b>แตะเพื่อเลือกรูป</b><small>รูปที่ รพ. ส่งมา หรือถ่ายจากมือถือก็ได้</small><input type="file" id="file" accept="image/*" hidden></label>
+    <div id="cropBox" style="display:none">
+      <div class="subhead">✂️ ลากกรอบครอบ "แถวเลขวันที่ 1–30" ลงมาถึง "แถว<span class="nm">สุชาดา</span>" ให้เห็นชื่อทางซ้ายและช่องรวม ชม. ทางขวา</div>
+      <div class="stage"><canvas id="cv"></canvas><div id="rect"></div></div>
+      <label class="opt" for="split"><span class="tx"><b>แบ่งครึ่งอ่าน 2 รอบ (แม่นขึ้น)</b><small>อ่านวันที่ 1–15 และ 16–30 แยกกัน ตัวอักษรใหญ่ขึ้นเท่าตัว</small></span><input type="checkbox" class="switch" id="split" checked></label>
+      <label class="opt" for="pro"><span class="tx"><b>ใช้โมเดลแม่นสูง</b><small>ช้ากว่า เหมาะกับรูปที่ไม่ค่อยชัด</small></span><input type="checkbox" class="switch" id="pro"></label>
+      <div class="row" style="margin-top:10px"><button class="btn" id="all">ใช้ทั้งรูป</button><button class="btn primary" id="go" disabled>🤖 อ่านรหัส</button></div>
+    </div>
+    <div class="status" id="status" style="display:none"></div>
+    <div class="pieces" id="pieces" style="display:none"></div>
+  </div>
+
+  <div class="card" id="out" style="display:none">
+    <div class="subhead">รหัสเวรของ <span class="nm">สุชาดา</span> <span id="foundName" style="color:var(--ink-3);font-weight:400"></span></div>
+    <div class="result" id="result"></div>
+    <div class="hours" id="hours"></div>
+    <div class="row"><button class="btn primary" id="copy">📋 ก๊อปรหัส</button><a class="btn" id="openApp" href="index.html" target="_blank">💗 เปิด NongMay Diary</a></div>
+    <div class="subhead" style="margin-top:12px">ตรวจทีละวัน (แก้ในช่องได้ รหัสด้านบนจะอัปเดตเอง)</div>
+    <div class="days" id="days"></div>
+    <div class="legend">💡 วางรหัสในแอปที่ 📥 นำเข้า → ⌨️ พิมพ์ → อ่านรหัส<br>รหัส: X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N · D1/N · D12/N</div>
+  </div>
+
+  <details class="card" style="font-size:13px;color:var(--ink-2)"><summary style="cursor:pointer;color:var(--brand);font-weight:600">⚙️ ตั้งค่าการเชื่อมต่อ</summary>
+    <div class="subhead">ลิงก์ Apps Script (/exec)</div><input class="input" id="url">
+    <div class="subhead">รหัสลับ</div><input class="input" id="key">
+    <div class="legend">ค่านี้เก็บไว้ในเครื่อง ใช้ตัวเดียวกับในแอปหลัก</div>
+  </details>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== ตั้งค่า (ใช้ค่าเดียวกับแอปหลัก) ===== */
+const DEFAULT_URL='https://script.google.com/macros/s/AKfycbwQgofvxPHlnjpGWyLsw8ZTs8kLFuVyS_j21prS3grcRZDTtsyxmyRDJ2LRbiDSAAYh/exec';
+const DEFAULT_KEY='nmay&pgolf';
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+$('url').value=localStorage.getItem('reader.url')||DEFAULT_URL;$('key').value=localStorage.getItem('reader.key')||DEFAULT_KEY;
+$('url').onchange=e=>localStorage.setItem('reader.url',e.target.value.trim());$('key').onchange=e=>localStorage.setItem('reader.key',e.target.value.trim());
+const now=new Date();$('month').value=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+$('name').oninput=e=>document.querySelectorAll('.nm').forEach(x=>x.textContent=e.target.value||'…');
+
+/* ===== รหัสเวร ===== */
+const CODES={'X':{type:'OFF'},'D':{type:'D',start:'08:00',end:'20:00'},'D*':{type:'D',start:'08:00',end:'22:00'},'ข':{type:'D',start:'08:00',end:'17:00'},'D1':{type:'D',start:'09:00',end:'20:00'},'D1*':{type:'D',start:'09:00',end:'22:00'},'D12':{type:'D',start:'12:00',end:'20:00'},'D12*':{type:'D',start:'12:00',end:'22:00'},'N':{type:'N',start:'20:00',end:'08:00'},'D/N':{type:'DN',start:'08:00',end:'08:00'},'D1/N':{type:'DN',start:'09:00',end:'08:00'},'D12/N':{type:'DN',start:'12:00',end:'08:00'}};
+const toMin=t=>{const [h,m]=t.split(':').map(Number);return h*60+m;};
+function parseCode(raw){let c=String(raw||'').trim().replace(/\s+/g,'').toUpperCase().replace('Х','X').replace('×','X');if(!c)return null;if(/^(X|OFF|-|0|หยุด)$/.test(c))return{type:'OFF',code:'X'};if(CODES[c])return Object.assign({code:c},CODES[c]);const m=c.match(/^(\d{1,2})(?:[:.]?(\d{2}))?-(\d{1,2})(?:[:.]?(\d{2}))?$/);if(m){const st=`${pad(m[1])}:${m[2]||'00'}`,en=`${pad(m[3])}:${m[4]||'00'}`;return{type:toMin(en)<=toMin(st)?'DN':'D',code:c,start:st,end:en};}if(/\/N$/.test(c)){const b=parseCode(c.replace(/\/N$/,''));if(b&&b.type==='D')return{type:'DN',code:c,start:b.start,end:'08:00'};}return null;}
+const hours=sh=>{if(!sh||sh.type==='OFF')return 0;let d=toMin(sh.end)-toMin(sh.start);if(d<=0)d+=1440;return d/60;};
+const daysIn=ym=>{const [y,m]=ym.split('-').map(Number);return new Date(y,m,0).getDate();};
+
+/* ===== รูป + ครอป ===== */
+let img=null,sel=null,drag=false;
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;e.target.value='';img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(f);});
+  const cv=$('cv');const sc=Math.min(1,1200/img.width);cv.width=Math.round(img.width*sc);cv.height=Math.round(img.height*sc);cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+  sel=null;$('rect').style.display='none';$('go').disabled=true;$('cropBox').style.display='block';$('out').style.display='none';$('pieces').style.display='none';$('status').style.display='none';};
+const rectOf=()=>$('cv').getBoundingClientRect();
+const pos=ev=>{const r=rectOf();return{x:Math.min(Math.max(0,ev.clientX-r.left),r.width),y:Math.min(Math.max(0,ev.clientY-r.top),r.height)};};
+function draw(){if(!sel)return;const el=$('rect');const x=Math.min(sel.x0,sel.x1),y=Math.min(sel.y0,sel.y1),w=Math.abs(sel.x1-sel.x0),h=Math.abs(sel.y1-sel.y0);el.style.display='block';el.style.cssText+=`;left:${x}px;top:${y}px;width:${w}px;height:${h}px`;$('go').disabled=w<20||h<10;}
+$('cv').addEventListener('pointerdown',ev=>{ev.preventDefault();const p=pos(ev);sel={x0:p.x,y0:p.y,x1:p.x,y1:p.y};drag=true;$('cv').setPointerCapture(ev.pointerId);draw();});
+$('cv').addEventListener('pointermove',ev=>{if(!drag)return;const p=pos(ev);sel.x1=p.x;sel.y1=p.y;draw();});
+$('cv').addEventListener('pointerup',()=>drag=false);$('cv').addEventListener('pointercancel',()=>drag=false);
+function region(){if(!sel)return{x:0,y:0,w:img.width,h:img.height};const r=rectOf();const sx=img.width/r.width,sy=img.height/r.height;return{x:Math.round(Math.min(sel.x0,sel.x1)*sx),y:Math.round(Math.min(sel.y0,sel.y1)*sy),w:Math.round(Math.abs(sel.x1-sel.x0)*sx),h:Math.round(Math.abs(sel.y1-sel.y0)*sy)};}
+function piece(rg,parts){ // parts: [{sx,sw}] ช่วงแนวนอน (สัดส่วน 0-1 ของ rg) ต่อกันเป็นรูปเดียว
+  const totalW=parts.reduce((a,p)=>a+p.sw,0)*rg.w;const scale=Math.min(3,Math.max(1,2400/totalW));
+  const cv=document.createElement('canvas');cv.width=Math.round(totalW*scale);cv.height=Math.round(rg.h*scale);const ctx=cv.getContext('2d');ctx.imageSmoothingQuality='high';
+  let x=0;parts.forEach(p=>{const w=p.sw*rg.w;ctx.drawImage(img,rg.x+p.sx*rg.w,rg.y,w,rg.h,x,0,Math.round(w*scale),cv.height);x+=Math.round(w*scale);ctx.fillStyle='#F0619C';ctx.fillRect(x-2,0,3,cv.height);});
+  return cv.toDataURL('image/jpeg',.92);}
+
+/* ===== เรียก AI ===== */
+async function ask(dataUrl,pro){const r=await fetch($('url').value.trim(),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({key:$('key').value.trim(),action:'ocr',pro,name:$('name').value.trim(),mime:'image/jpeg',image:dataUrl.split(',')[1]}),redirect:'follow'});const j=await r.json();if(j.error)throw new Error(j.detail||j.error);return j.result||{};}
+let rows=[],total=null;
+$('all').onclick=()=>{sel=null;run();};$('go').onclick=run;
+async function run(){
+  const rg=region();const pro=$('pro').checked;const split=$('split').checked;
+  const st=$('status');st.style.display='block';$('cropBox').style.display='none';$('out').style.display='none';
+  const NAME_W=0.22; // สัดส่วนความกว้างของคอลัมน์ชื่อ (ซ้ายสุด)
+  const pieces=split?[piece(rg,[{sx:0,sw:0.62}]),piece(rg,[{sx:0,sw:NAME_W},{sx:0.58,sw:0.42}])]:[piece(rg,[{sx:0,sw:1}])];
+  $('pieces').innerHTML=pieces.map(p=>`<img src="${p}">`).join('');$('pieces').style.display='flex';
+  try{
+    const byDay={};let name='';total=null;let month=null;
+    for(let i=0;i<pieces.length;i++){
+      st.textContent=`🤖 AI${pro?' (แม่นสูง)':''} กำลังอ่าน${split?` ส่วนที่ ${i+1}/${pieces.length}`:''}… (${pro?'30–60':'10–30'} วินาที)`;
+      const res=await ask(pieces[i],pro);
+      (res.days||[]).forEach(d=>{const n=Number(d.day);if(!n)return;const code=String(d.code||'').trim();if(!byDay[n]||(code&&!byDay[n].code))byDay[n]={code,note:String(d.note||'').trim()};});
+      if(res.name&&!name)name=res.name;if(res.total_hours!=null&&Number.isFinite(Number(res.total_hours)))total=Number(res.total_hours);if(res.month)month=res.month;
+    }
+    if(month&&/^\d{4}-\d{2}$/.test(month)){let [y,m]=month.split('-').map(Number);if(y>2400)y-=543;$('month').value=`${y}-${pad(m)}`;}
+    const n=daysIn($('month').value);rows=[];for(let d=1;d<=n;d++)rows.push({day:d,code:(byDay[d]&&byDay[d].code)||'',note:(byDay[d]&&byDay[d].note)||''});
+    if(!Object.keys(byDay).length)throw new Error('AI ไม่พบแถวชื่อนี้ ลองครอปให้เห็นชื่อชัด ๆ');
+    $('foundName').textContent=name?'· พบ: '+name:'';render();
+    st.innerHTML='อ่านเสร็จแล้ว ✨ ตรวจกับรูปด้านบนก่อนก๊อปนะ <button class="btn" id="again" style="margin-left:6px;min-height:34px;padding:4px 12px">✂️ ครอปใหม่</button>';
+    $('again').onclick=()=>{$('cropBox').style.display='block';st.style.display='none';};
+  }catch(err){st.textContent='อ่านไม่สำเร็จ: '+err.message;$('cropBox').style.display='block';}
+}
+function render(){
+  $('out').style.display='block';
+  let calc=0,bad=0;
+  $('days').innerHTML=rows.map((r,i)=>{const sh=r.code?parseCode(r.code):{type:'OFF'};const isBad=!sh;if(isBad)bad++;else calc+=hours(sh);
+    return `<div class="d ${sh?sh.type:''}${isBad?' bad':''}"><small>วันที่ ${r.day}</small><input data-i="${i}" value="${r.code.replace(/"/g,'&quot;')}" placeholder="X"><div class="note">${r.note||''}</div></div>`;}).join('');
+  calc=Math.round(calc);
+  $('result').textContent=rows.map(r=>r.code||'X').join(' ');
+  const hb=$('hours');
+  if(total!=null){const ok=calc===total&&!bad;hb.className='hours '+(ok?'ok':'bad');hb.innerHTML=`<span>ชั่วโมงจากรหัส <b>${calc}</b> · ในตาราง <b>${total}</b></span><span>${ok?'✅ ตรงกัน อ่านถูกทั้งแถว':'⚠️ ไม่ตรง มีบางช่องผิด ไล่เช็กด้านล่างหรือครอปใหม่'}</span>`;}
+  else{hb.className='hours';hb.innerHTML=`<span>ชั่วโมงรวมจากรหัส <b>${calc}</b> ชม.</span><span style="color:var(--ink-3)">ครอปให้เห็นช่อง "รวม" จะเช็กอัตโนมัติได้</span>`;}
+  if(bad){hb.className='hours bad';hb.innerHTML=`<span>มี <b>${bad}</b> ช่องที่ไม่รู้จักรหัส</span><span>แก้ในช่องสีแดงด้านล่าง</span>`;}
+}
+$('days').addEventListener('input',e=>{const inp=e.target.closest('input[data-i]');if(!inp)return;rows[+inp.dataset.i].code=inp.value;clearTimeout(window._t);window._t=setTimeout(()=>{const i=inp.dataset.i;render();const a=$('days').querySelector(`input[data-i="${i}"]`);if(a){a.focus();}},600);});
+$('copy').onclick=async()=>{const t=$('result').textContent;try{await navigator.clipboard.writeText(t);}catch(e){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}const el=$('toast');el.textContent='ก๊อปรหัสแล้ว 💗 ไปวางในแอปได้เลย';el.style.display='block';setTimeout(()=>el.style.display='none',2500);};
+</script>
+</body>
+</html>
