@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="2.7">
+<meta name="app-version" content="2.8">
 <title>NongMay Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -315,7 +315,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคนน่ารัก 💕</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.7</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้แฟนพี่ใช้งานง่าย 💞<br><span style="opacity:.6">v2.8</span></div>
     </div>
   </div>
 </div>
@@ -342,7 +342,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
       <div class="weekdays"><div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div></div>
       <div class="grid" id="grid"></div>
       <details class="legend-box" style="margin-top:10px"><summary>รหัสเวรทั้งหมด</summary>
-        <div class="codes">☀️ D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้<br>📍 สีตำแหน่ง: <i style="background:#FF3DDA"></i> Inc.DAY <i style="background:#38E1FF"></i> Inc.NIGHT <i style="background:#FC9254"></i> Sx. <i style="background:#FF2D2D"></i> Ortho. <i style="background:#FFE600"></i> GP. <i style="background:#B39DDB"></i> UroSx. <i style="background:#99D154"></i> Vital sign <i style="background:#0FA958"></i> เจาะเลือด</div>
+        <div class="codes">☀️ D 08–20 · D* 08–22 · ช 08–17 (เช้า) · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้<br>📍 สีตำแหน่ง: <i style="background:#FF3DDA"></i> Inc.DAY <i style="background:#38E1FF"></i> Inc.NIGHT <i style="background:#FC9254"></i> Sx. <i style="background:#FF2D2D"></i> Ortho. <i style="background:#FFE600"></i> GP. <i style="background:#B39DDB"></i> UroSx. <i style="background:#99D154"></i> Vital sign <i style="background:#0FA958"></i> เจาะเลือด</div>
       </details>
       <p class="sparkle">✨ แตะวันเพื่อลงเวรหรือเพิ่มกิจกรรม ✨</p>
     </section>
@@ -452,10 +452,10 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
       </div>
       <a class="readerlink" id="openProject" href="https://claude.ai/project/01a0b485-a0f6-7152-8795-4756127f971f" target="_blank" rel="noopener"><span style="font-size:26px">🤖</span><span style="flex:1"><b>แปลงรูปตารางเวรเป็นรหัสด้วย Claude</b><small>เปิด Project → แนบรูปตารางเวร → กดส่ง → ก๊อปบรรทัดรหัสกลับมาวางด้านล่าง</small></span><span>›</span></a>
       <div class="subhead">วางรหัสเวรตามลำดับวันที่ 1 ถึงสิ้นเดือน</div>
-      <textarea class="input" id="impText" rows="3" placeholder="เช่น X X X D/N N X D D/N X D D1* X X D D D12/N X D D/N X D D D D1/N X D D1/N X D D1/N"></textarea>
+      <textarea class="input" id="impText" rows="3" placeholder="เช่น X X X D/N N X D D/N X D D1* X X D D D12/N X D D/N X D D D D1/N X D D1/N X D D1/N  (ช = กะเช้า 08–17)"></textarea>
       <button class="btn primary full" id="impParse" style="margin-top:8px">อ่านรหัส</button>
       <details class="legend-box"><summary>รหัสเวรที่รู้จัก</summary>
-        <div class="codes">ต่อท้ายด้วย @ตำแหน่ง ได้ เช่น D@GP, D/N@GP+INC_N · ตำแหน่ง: INC_D INC_N SX ORTHO GP URO VS LAB<br>X หยุด · D 08–20 · D* 08–22 · ข 08–17 · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
+        <div class="codes">ต่อท้ายด้วย @ตำแหน่ง ได้ เช่น D@GP, D/N@GP+INC_N · ตำแหน่ง: INC_D INC_N SX ORTHO GP URO VS LAB<br>X หยุด · D 08–20 · D* 08–22 · ช 08–17 (เช้า) · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22 · N 20–08 · D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 7-12 / 8-12 ชั่วโมงพิเศษ</div>
       </details>
       <div id="impPreview"></div>
       <label class="alarm" style="display:none" id="impReplaceWrap"><span class="alarm-ic">🧹</span><span class="alarm-tx"><b>ล้างเวรเดิมของเดือนนี้ก่อน</b><small>กิจกรรมและงานไม่ถูกลบ</small></span><input type="checkbox" class="switch" id="impReplace" checked></label>
@@ -499,7 +499,7 @@ const CODES={
   'X':{type:'OFF',label:'หยุด'},
   'D':{type:'D',start:'08:00',end:'20:00'},
   'D*':{type:'D',start:'08:00',end:'22:00'},
-  'ข':{type:'D',start:'08:00',end:'17:00'},
+  'ช':{type:'D',start:'08:00',end:'17:00'},
   'D1':{type:'D',start:'09:00',end:'20:00'},
   'D1*':{type:'D',start:'09:00',end:'22:00'},
   'D12':{type:'D',start:'12:00',end:'20:00'},
@@ -518,7 +518,7 @@ function postDesc(sh){const a=[];if(sh.post)a.push((sh.type==='DN'?'กลาง
 const ALARM_BEFORE=50; // ปลุกก่อนเข้าเวรเช้า 50 นาที (08:00 → 07:10)
 const shStart=sh=>sh.start||SHIFTS[sh.type].start;
 const shEnd=sh=>sh.end||SHIFTS[sh.type].end;
-const shCode=sh=>sh.code||(sh.type==='DN'?'D/N':sh.type==='OFF'?'X':sh.type==='D'&&sh.end==='22:00'?'D*':sh.type);
+const shCode=sh=>(sh.code==='ข'?'ช':sh.code)||(sh.type==='DN'?'D/N':sh.type==='OFF'?'X':sh.type==='D'&&sh.end==='22:00'?'D*':sh.type);
 const shCross=sh=>sh.type!=='OFF'&&shEnd(sh)<=shStart(sh);
 const dm=s=>{const d=parseYmd(s);return `${d.getDate()}/${pad(d.getMonth()+1)}`;};
 const shRange=(date,sh)=>{if(sh.type==='OFF')return null;const nx=parseYmd(date);nx.setDate(nx.getDate()+1);return{sd:date,st:shStart(sh),ed:shCross(sh)?ymd(nx):date,et:shEnd(sh)};};
@@ -528,7 +528,7 @@ const shHours=sh=>{if(sh.type==='OFF')return 0;let d=toMin(shEnd(sh))-toMin(shSt
 const alarmTime=sh=>{if(sh.type==='OFF')return null;const st=toMin(shStart(sh));if(st>=12*60)return null;const a=st-ALARM_BEFORE;return `${pad(Math.floor(a/60))}:${pad(a%60)}`;};
 /* แปลงรหัสเป็นเวร รองรับ 7-12, 8-12 (ชั่วโมงพิเศษ) ด้วย */
 function parseCode(raw){
-  let c=String(raw||'').trim().replace(/\s+/g,'').toUpperCase().replace('Х','X').replace('×','X');
+  let c=String(raw||'').trim().replace(/\s+/g,'').toUpperCase().replace('Х','X').replace('×','X').replace('ข','ช');
   if(!c)return null;
   if(/^(X|OFF|-|0|หยุด)$/.test(c))return{type:'OFF',code:'X'};
   if(CODES[c])return Object.assign({code:c},CODES[c]);
@@ -636,7 +636,7 @@ async function init(){
 
 /* ===== calendar ===== */
 let cur=new Date();cur.setDate(1);let sel=todayStr();let color=COLORS[0];let pickCode=null;
-const CODE_ORDER=['D','D*','ข','D1','D1*','D12','D12*','N','D/N','D1/N','D12/N','X'];
+const CODE_ORDER=['D','D*','ช','D1','D1*','D12','D12*','N','D/N','D1/N','D12/N','X'];
 const codeLabel=c=>c==='X'?'💗 หยุด':c==='N'?'🌙 N':c.includes('/N')?'☀️🌙 '+c:'☀️ '+c;
 const codeTime=c=>{const o=CODES[c];return o.type==='OFF'?'พักผ่อน':`${o.start.replace(':','.')}–${o.end.replace(':','.')}${o.type!=='D'?' (+1)':''}`;};
 $('shiftPick').innerHTML=CODE_ORDER.map(c=>`<button type="button" data-s="${c}"><span class="tag shift ${CODES[c].type}">${codeLabel(c)}</span><small>${codeTime(c)}</small></button>`).join('')+`<button type="button" data-s="__custom" class="custom" style="grid-column:span 4;flex-direction:row;justify-content:center;gap:8px"><span class="tag" style="width:auto;padding:5px 12px">⏱️ กำหนดเวลาเอง</span><small>เช่น 7-12 เจาะเลือด, ประชุม 13-16</small></button>`;
@@ -663,12 +663,12 @@ function itemsOn(d){return{sh:state.shifts[d]||null,ev:state.events.filter(e=>e.
 function renderCal(){
   $('monthLabel').textContent=cur.toLocaleDateString('th-TH',{month:'long',year:'numeric'});
   const first=new Date(cur);const start=new Date(first);start.setDate(1-first.getDay());
-  const t=todayStr();let html='';const cnt={D:0,N:0,DN:0,OFF:0};
+  const t=todayStr();let html='';const cnt={D:0,N:0,DN:0,OFF:0,CH:0};
   const days=(first.getDay()+new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate())>35?42:35;
   for(let i=0;i<days;i++){
     const d=new Date(start);d.setDate(start.getDate()+i);const s=ymd(d);const other=d.getMonth()!==cur.getMonth();
     const {sh,ev,td}=itemsOn(s);
-    if(!other&&sh)cnt[sh.type]=(cnt[sh.type]||0)+1;
+    if(!other&&sh){cnt[sh.type]=(cnt[sh.type]||0)+1;if(shCode(sh)==='ช')cnt.CH=(cnt.CH||0)+1;}
     const r=sh?shRange(s,sh):null;
     const timeHtml=r?(r.sd===r.ed?`<span class="stime">${r.st.replace(':','.')}<br><em>ถึง</em><br>${r.et.replace(':','.')}</span>`:`<span class="stime">${dm(r.sd)} ${r.st.replace(':','.')}<br><em>ถึง</em><br>${dm(r.ed)} ${r.et.replace(':','.')}</span>`):'';
     const postHtml=sh&&(sh.post||sh.postN)?`<span class="post"><span class="sw">${sh.post?`<i style="background:${POSTS[sh.post].color}"></i>`:''}${sh.postN?`<i style="background:${POSTS[sh.postN].color}"></i>`:''}</span><b>${esc(sh.post?postLabel(sh.post):postLabel(sh.postN))}</b></span>`:'';
@@ -682,7 +682,7 @@ function renderCal(){
   }
   $('grid').innerHTML=html;
   let hrs=0;Object.entries(state.shifts).forEach(([d,sh])=>{if(d.slice(0,7)===ymd(cur).slice(0,7))hrs+=shHours(sh);});
-  $('summary').innerHTML=`<span class="chip"><span class="tag shift D">D</span>Day <b>${cnt.D}</b></span><span class="chip"><span class="tag shift N">N</span>Night <b>${cnt.N}</b></span><span class="chip"><span class="tag shift DN">DN</span>ควบ <b>${cnt.DN}</b></span><span class="chip"><span class="tag shift OFF">✓</span>หยุด <b>${cnt.OFF}</b></span><span class="chip">รวม <b>${hrs}</b> ชม.</span>`;
+  $('summary').innerHTML=`<span class="chip"><span class="tag shift D">D</span>Day <b>${cnt.D-cnt.CH}</b></span><span class="chip"><span class="tag shift D" style="background:#FFE9A8">ช</span>เช้า <b>${cnt.CH}</b></span><span class="chip"><span class="tag shift N">N</span>Night <b>${cnt.N}</b></span><span class="chip"><span class="tag shift DN">DN</span>ควบ <b>${cnt.DN}</b></span><span class="chip"><span class="tag shift OFF">✓</span>หยุด <b>${cnt.OFF}</b></span><span class="chip">รวม <b>${hrs}</b> ชม.</span>`;
 }
 $('grid').onclick=e=>{const b=e.target.closest('.day');if(!b)return;sel=b.dataset.d;openSheet();};
 $('prevM').onclick=()=>{cur.setMonth(cur.getMonth()-1);renderCal();};
