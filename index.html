@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="3.4">
+<meta name="app-version" content="3.5">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -329,7 +329,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้คุณแฟนใช้งานง่าย 💞<br><span style="opacity:.6">v3.4</span></div>
+      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้คุณแฟนใช้งานง่าย 💞<br><span style="opacity:.6">v3.5</span></div>
     </div>
   </div>
 </div>
@@ -539,7 +539,7 @@ const shStart=sh=>sh.start||SHIFTS[sh.type].start;
 const shEnd=sh=>sh.end||SHIFTS[sh.type].end;
 const shCode=sh=>(sh.code==='ข'?'ช':sh.code)||(sh.type==='DN'?'D/N':sh.type==='OFF'?'X':sh.type==='D'&&sh.end==='22:00'?'D*':sh.type);
 const shCross=sh=>sh.type!=='OFF'&&shEnd(sh)<=shStart(sh);
-const dm=s=>{const d=parseYmd(s);return `${d.getDate()}/${pad(d.getMonth()+1)}`;};
+const dm=s=>{const d=parseYmd(s);return `${pad(d.getDate())}/${pad(d.getMonth()+1)}`;};
 const shRange=(date,sh)=>{if(sh.type==='OFF')return null;const nx=parseYmd(date);nx.setDate(nx.getDate()+1);return{sd:date,st:shStart(sh),ed:shCross(sh)?ymd(nx):date,et:shEnd(sh)};};
 const shRangeText=(date,sh)=>{const r=shRange(date,sh);if(!r)return '';return r.sd===r.ed?`(${dm(r.sd)}) ${r.st.replace(':','.')} ถึง ${r.et.replace(':','.')} น.`:`(${dm(r.sd)}) ${r.st.replace(':','.')} ถึง (${dm(r.ed)}) ${r.et.replace(':','.')} น.`;};
 const toMin=t=>{const [h,m]=t.split(':').map(Number);return h*60+m;};
