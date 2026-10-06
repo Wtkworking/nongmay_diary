@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Love Diary">
 <meta name="theme-color" content="#ffffff">
-<meta name="app-version" content="4.1">
+<meta name="app-version" content="4.3">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -384,7 +384,42 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .legend-box summary{color:var(--blue)}
 .sparkle{color:#B5B5B5}
 #syncDot[data-st="ok"] .sd{background:#4CD080}
-@media (min-width:700px){.day{min-height:150px}}
+.day{justify-content:flex-start;padding:4px 2px 4px;gap:3px;min-height:118px}
+.day .n{margin-bottom:1px}
+.wk{position:absolute;left:3px;top:6px;font-size:9px;color:#B5B5B5}
+.blks{display:flex;flex-direction:column;gap:3px;width:100%}
+.blk{display:block;width:100%;border-radius:5px;font-size:10px;font-weight:600;padding:4px 2px;text-align:center;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.2px}
+.pbars{margin-top:auto;display:flex;flex-direction:column;gap:2px;width:100%;padding-top:4px}
+.pbar{display:flex;flex-direction:column;align-items:center;width:100%;color:var(--pc)}
+.pbar i{display:block;width:100%;height:0;border-top:2px solid var(--pc);position:relative;margin:0 0 1px}
+.pbar i::before,.pbar i::after{content:"";position:absolute;top:-4px;border:3px solid transparent}
+.pbar i::before{left:-1px;border-right:4px solid var(--pc)}
+.pbar i::after{right:-1px;border-left:4px solid var(--pc)}
+.pbar b{font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;filter:saturate(1.2) brightness(.85)}
+.day.past .blk,.day.past .pbar{opacity:.55}
+.day .shift.none{display:none}
+.pill{font-size:9px;padding:2px 4px}
+@media (max-width:700px){.stime .ptx{display:none}}
+.cal-head h2{font-size:26px;font-weight:800;letter-spacing:-.3px;font-family:-apple-system,"IBM Plex Sans Thai",sans-serif}
+.weekdays div{font-size:15px;color:#9A9A9A;font-weight:500;padding-bottom:6px}
+.weekdays div:first-child{color:#E8505B}
+.grid{border-left:0;border-top:1px solid #E6E6E6}
+.day{border-right:1px solid #ECECEC;border-bottom:1px solid #E6E6E6;min-height:128px;padding:6px 2px 6px;gap:4px}
+.day:last-child,.day:nth-child(7n){border-right:0}
+.day .n{font-size:17px;font-weight:500;color:#333;width:auto;height:auto;margin:0 0 2px;line-height:1.1}
+.day.sun .n{color:#E8505B}
+.day.today .n{background:transparent;color:var(--blue);font-weight:700}
+.day.other{opacity:.4}
+.day.past{opacity:.6;background:#fff}
+.wk{top:8px;left:3px;font-size:10px;color:#9A9A9A}
+.blks{gap:4px}
+.blk{border-radius:4px;font-size:11px;font-weight:600;padding:5px 2px;letter-spacing:-.3px}
+.pbar i{border-top-width:1.5px}
+.pbar i::before,.pbar i::after{top:-3.5px;border-width:2.5px}
+.pbar i::before{border-right:4px solid var(--pc)}.pbar i::after{border-left:4px solid var(--pc)}
+.pbar b{font-size:10px;font-weight:500;filter:none}
+.summary .chip{font-size:12px}
+@media (min-width:700px){.day{min-height:160px}.blk{font-size:13px;padding:6px 4px}.pbar b{font-size:12px}.wk{font-size:11px}.day .n{font-size:18px}}
 </style>
 </head>
 <body>
@@ -395,7 +430,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้คุณแฟนใช้งานง่าย 💞<br><span style="opacity:.6">v4.1</span></div>
+      <div class="hint"><br><span style="opacity:.6">v4.3</span></div>
     </div>
   </div>
 </div>
@@ -419,7 +454,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
         <button class="btn small primary" id="importBtn" aria-label="นำเข้าตารางเวร">📥 นำเข้า</button>
       </div>
       <div class="summary" id="summary"></div>
-      <div class="weekdays"><div>อา</div><div>จ</div><div>อ</div><div>พ</div><div>พฤ</div><div>ศ</div><div>ส</div></div>
+      <div class="weekdays"><div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div></div>
       <div class="grid" id="grid"></div>
       <details class="legend-box" style="margin-top:10px"><summary>รหัสเวรทั้งหมด</summary>
         <div class="codes">☀️ D 08–20 · D* 08–22 · ช 08–17 (เช้า) · D1 09–20 · D1* 09–22 · D12 12–20 · D12* 12–22<br>🌙 N 20–08 · ☀️🌙 D/N 08–08 · D1/N 09–08 · D12/N 12–08 · 💗 X หยุด · ⏱️ กำหนดเวลาเองได้<br>📍 สีตำแหน่ง: <i style="background:#FF3DDA"></i> Inc.DAY <i style="background:#38E1FF"></i> Inc.NIGHT <i style="background:#FC9254"></i> Sx. <i style="background:#FF2D2D"></i> Ortho. <i style="background:#FFE600"></i> GP. <i style="background:#B39DDB"></i> UroSx. <i style="background:#99D154"></i> Vital sign <i style="background:#0FA958"></i> เจาะเลือด</div>
@@ -590,7 +625,7 @@ const CODES={
   'D1/N':{type:'DN',start:'09:00',end:'08:00'},
   'D12/N':{type:'DN',start:'12:00',end:'08:00'},
 };
-const POSTS={INC_D:{label:'Inc. DAY',color:'#FF3DDA'},INC_N:{label:'Inc. NIGHT',color:'#38E1FF'},SX:{label:'หน้าห้อง Sx.',color:'#FC9254'},ORTHO:{label:'หน้าห้อง Ortho.',color:'#FF2D2D'},GP:{label:'หน้าห้อง GP.',color:'#FFE600'},URO:{label:'หน้าห้อง UroSx.',color:'#B39DDB'},VS:{label:'วัด Vital sign',color:'#99D154'},LAB:{label:'เจาะเลือดห้องแลป',color:'#0FA958'}};
+const POSTS={INC_D:{label:'Inc. DAY',color:'#F28AB2'},INC_N:{label:'Inc. NIGHT',color:'#3D9BFF'},SX:{label:'หน้าห้อง Sx.',color:'#E8831A'},ORTHO:{label:'หน้าห้อง Ortho.',color:'#D9323B'},GP:{label:'หน้าห้อง GP.',color:'#E8C21A'},URO:{label:'หน้าห้อง UroSx.',color:'#9B8CCF'},VS:{label:'วัด Vital sign',color:'#5DBE3A'},LAB:{label:'เจาะเลือดห้องแลป',color:'#1E9E5A'}};
 const POST_ORDER=['INC_D','INC_N','SX','ORTHO','GP','URO','VS','LAB'];
 const postLabel=k=>POSTS[k]?POSTS[k].label:'';
 function splitToken(tok){const [code,rest]=String(tok).split('@');let post='',postN='';if(rest){const parts=rest.toUpperCase().split('+');post=POSTS[parts[0]]?parts[0]:'';postN=parts[1]&&POSTS[parts[1]]?parts[1]:'';}return{code:code||'',post,postN};}
@@ -599,6 +634,19 @@ function postLines(sh){const L=[];const t=x=>x.replace(':','.');
   if(sh.type==='DN'){if(sh.post)L.push({color:POSTS[sh.post].color,label:postLabel(sh.post),time:`${t(shStart(sh))}–20.00`});if(sh.postN)L.push({color:POSTS[sh.postN].color,label:postLabel(sh.postN),time:`20.00–${t(shEnd(sh))}`});}
   else{if(sh.post)L.push({color:POSTS[sh.post].color,label:postLabel(sh.post),time:''});}
   return L;}
+const hh=t=>String(parseInt(t.split(':')[0],10));
+const BLOCK_COLORS={'08-20':['#F6C544','#3A2E00'],'08-22':['#3D9BFF','#fff'],'09-20':['#7ED321','#fff'],'09-22':['#6E8AA0','#fff'],'08-17':['#2BC4B5','#fff'],'12-20':['#F39C38','#fff'],'12-22':['#A66BFF','#fff'],'07-20':['#F6C544','#3A2E00']};
+function shiftBlocks(sh){
+  if(sh.type==='OFF')return [{text:'Off💗',bg:'#F5464D',fg:'#fff'}];
+  const st=shStart(sh),en=shEnd(sh);
+  if(sh.type==='N')return [{text:`Night${hh(st)}-${hh(en)}`,bg:'#B36BE6',fg:'#fff'}];
+  if(sh.type==='DN'){const k=`${st.slice(0,2)}-20`;const c=BLOCK_COLORS[k]||['#F7C948','#3B2E00'];return [{text:`Day${hh(st)}-20`,bg:c[0],fg:c[1]},{text:`Night20-${hh(en)}`,bg:'#B36BE6',fg:'#fff'}];}
+  const k=`${st.slice(0,2)}-${en.slice(0,2)}`;const c=BLOCK_COLORS[k]||['#D9DEE7','#333'];
+  const label=shCode(sh)==='ช'?`เช้า${hh(st)}-${hh(en)}`:`Day${hh(st)}-${hh(en)}`;
+  return [{text:label,bg:c[0],fg:c[1]}];
+}
+const shortPost=l=>l.replace('หน้าห้อง ','ห้อง').replace('Inc. DAY','Inc.').replace('Inc. NIGHT','Inc.').replace('วัด Vital sign','Vital sign').replace('เจาะเลือดห้องแลป','เจาะเลือด');
+function isoWeek(d){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=x.getUTCDay()||7;x.setUTCDate(x.getUTCDate()+4-day);const y0=new Date(Date.UTC(x.getUTCFullYear(),0,1));return Math.ceil(((x-y0)/86400000+1)/7);}
 function postDesc(sh){return postLines(sh).map(l=>(l.time?l.time+' ':'')+l.label).join(' · ');}
 const ALARM_BEFORE=50; // ปลุกก่อนเข้าเวรเช้า 50 นาที (08:00 → 07:10)
 const shStart=sh=>sh.start||SHIFTS[sh.type].start;
@@ -754,7 +802,7 @@ $('colors').onclick=e=>{const b=e.target.closest('button');if(!b)return;color=b.
 function itemsOn(d){return{sh:state.shifts[d]||null,ev:state.events.filter(e=>e.date===d).sort((a,b)=>a.start.localeCompare(b.start)),td:state.todos.filter(t=>t.due===d)};}
 
 function renderCal(){
-  $('monthLabel').textContent=cur.toLocaleDateString('th-TH',{month:'long',year:'numeric'});
+  $('monthLabel').textContent=cur.toLocaleDateString('en-US',{month:'short',year:'numeric'});
   const first=new Date(cur);const start=new Date(first);start.setDate(1-first.getDay());
   const t=todayStr();let html='';const cnt={D:0,N:0,DN:0,OFF:0,CH:0};
   const days=(first.getDay()+new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate())>35?42:35;
@@ -762,22 +810,16 @@ function renderCal(){
     const d=new Date(start);d.setDate(start.getDate()+i);const s=ymd(d);const other=d.getMonth()!==cur.getMonth();
     const {sh,ev,td}=itemsOn(s);
     if(!other&&sh){cnt[sh.type]=(cnt[sh.type]||0)+1;if(shCode(sh)==='ช')cnt.CH=(cnt.CH||0)+1;}
-    const r=sh?shRange(s,sh):null;const tt=x=>x.replace(':','.');
-    const pl=k=>k?`<span class="pline"><i style="background:${POSTS[k].color}"></i><span class="ptx">${esc(postLabel(k))}</span></span>`:'';
-    let timeHtml='';
-    if(r){
-      if(sh.type==='DN'){timeHtml=`<span class="stime"><span class="dt">${dm(r.sd)}</span>${tt(r.st)}–20.00${pl(sh.post)}<em>ถึง</em><span class="dt">${dm(r.ed)}</span>20.00–${tt(r.et)}${pl(sh.postN)}</span>`;}
-      else if(r.sd!==r.ed){timeHtml=`<span class="stime"><span class="dt">${dm(r.sd)}</span>${tt(r.st)}<em>ถึง</em><span class="dt">${dm(r.ed)}</span>${tt(r.et)}${pl(sh.post)}</span>`;}
-      else{timeHtml=`<span class="stime">${tt(r.st)}<em>ถึง</em>${tt(r.et)}${pl(sh.post)}</span>`;}
-    }
-    const postHtml='';
-    const shiftHtml=sh?`<span class="shift ${sh.type}">${sh.type==='OFF'?'หยุด':esc(shCode(sh))}</span>${postHtml}${timeHtml}`:`<span class="shift none">·</span>`;
+    const blocks=sh?shiftBlocks(sh):[];
+    const shiftHtml=blocks.map(b=>`<span class="blk" style="background:${b.bg};color:${b.fg}">${esc(b.text)}</span>`).join('')||`<span class="shift none">·</span>`;
+    const postLinesHtml=sh?postLines(sh).map(l=>`<span class="pbar" style="--pc:${l.color}"><i></i><b>${esc(shortPost(l.label))}</b></span>`).join(''):'';
+    const wk=d.getDay()===0?`<span class="wk">${isoWeek(d)}</span>`:'';
     const items=[...ev.map(e=>({k:'e',...e})),...td.map(x=>({k:'t',...x}))];
     const maxShow=sh?(sh.type==='OFF'?2:1):3;
     const pills=items.slice(0,maxShow).map(x=>x.k==='e'?`<span class="pill" style="background:${x.color}">${x.emoji?`<span class="em">${x.emoji}</span>`:''}${esc(x.title)}</span>`:`<span class="pill td${x.done?' done':''}">${x.done?'💗':'☐'} ${esc(x.title)}</span>`).join('');
     const more=items.length>maxShow?`<span class="more">+${items.length-maxShow}</span>`:'';
     const dots=pills+more;
-    html+=`<button class="day${other?' other':''}${s===t?' today':''}${s<t?' past':''}${d.getDay()===0?' sun':''}" data-d="${s}" aria-label="${thDate(s)}"><span class="n">${d.getDate()}</span>${shiftHtml}<span class="pills">${dots}</span></button>`;
+    html+=`<button class="day${other?' other':''}${s===t?' today':''}${s<t?' past':''}${d.getDay()===0?' sun':''}" data-d="${s}" aria-label="${thDate(s)}">${wk}<span class="n">${d.getDate()}</span><span class="blks">${shiftHtml}</span><span class="pills">${dots}</span><span class="pbars">${postLinesHtml}</span></button>`;
   }
   $('grid').innerHTML=html;
   let hrs=0;Object.entries(state.shifts).forEach(([d,sh])=>{if(d.slice(0,7)===ymd(cur).slice(0,7))hrs+=shHours(sh);});
