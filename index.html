@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Love Diary">
 <meta name="theme-color" content="#ffffff">
-<meta name="app-version" content="4.6">
+<meta name="app-version" content="4.7">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -422,21 +422,18 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .blk{white-space:nowrap;overflow:hidden;text-overflow:clip}
 .blk.sm{font-size:9.5px;letter-spacing:-.5px;padding:5px 1px}
 .pills{gap:4px;margin-top:0}
-.blk.ev{position:relative;overflow:hidden;color:#4A2438;font-weight:700;text-align:left;padding:5px 6px;border-radius:6px;
-  background:linear-gradient(135deg,color-mix(in srgb,var(--ec) 85%,#fff) 0%,color-mix(in srgb,var(--ec) 55%,#fff) 50%,color-mix(in srgb,var(--ec) 85%,#fff) 100%);
-  box-shadow:0 0 0 1.5px #fff inset,0 0 8px color-mix(in srgb,var(--ec) 70%,transparent);animation:glow 2.2s ease-in-out infinite}
-.blk.ev::after{content:"✨";position:absolute;right:3px;top:-1px;font-size:9px;animation:twinkle 1.6s ease-in-out infinite}
-.blk.ev .sp{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%);transform:translateX(-120%);animation:shine 2.6s ease-in-out infinite}
-.blk.ev .em{margin-right:3px}
-.blk.ev{padding:5px 0;text-align:left}
-.blk.ev .mq{display:block;width:100%;overflow:hidden;white-space:nowrap;position:relative;z-index:1;mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}
-.blk.ev .mqt{display:inline-block;padding-left:4px;animation:marquee 7s linear infinite;text-shadow:0 0 6px rgba(255,255,255,.9)}
+.blk.ev{position:relative;overflow:hidden;background:#1B1730;color:var(--ec);border:1.5px solid var(--ec);border-radius:7px;padding:4px 0;text-align:left;font-weight:600;
+  box-shadow:0 0 6px color-mix(in srgb,var(--ec) 80%,transparent),inset 0 0 8px color-mix(in srgb,var(--ec) 35%,transparent);animation:neon 1.8s ease-in-out infinite}
+.blk.ev::after{content:"✦";position:absolute;right:3px;top:0;font-size:9px;color:#fff;text-shadow:0 0 6px var(--ec);animation:twinkle 1.6s ease-in-out infinite;z-index:2}
+.blk.ev .sp{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,color-mix(in srgb,var(--ec) 45%,#fff) 50%,transparent 65%);opacity:.55;transform:translateX(-120%);animation:shine 3s ease-in-out infinite}
+.blk.ev .mq{display:block;width:100%;overflow:hidden;white-space:nowrap;position:relative;z-index:1}
+.blk.ev .mqt{display:inline-block;padding:1px 4px 0;font-family:"IBM Plex Sans Thai","Noto Sans Thai",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:0;line-height:1.5;color:#fff;text-shadow:0 0 5px var(--ec),0 0 10px color-mix(in srgb,var(--ec) 70%,transparent);animation:marquee 7s linear infinite}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
-@keyframes twinkle{0%,100%{opacity:.4;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(15deg)}}
-@keyframes glow{0%,100%{box-shadow:0 0 0 1.5px #fff inset,0 0 6px color-mix(in srgb,var(--ec) 60%,transparent)}50%{box-shadow:0 0 0 1.5px #fff inset,0 0 14px color-mix(in srgb,var(--ec) 95%,transparent)}}
+@keyframes twinkle{0%,100%{opacity:.4;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(20deg)}}
+@keyframes neon{0%,100%{box-shadow:0 0 5px color-mix(in srgb,var(--ec) 70%,transparent),inset 0 0 6px color-mix(in srgb,var(--ec) 30%,transparent)}50%{box-shadow:0 0 14px var(--ec),0 0 26px color-mix(in srgb,var(--ec) 55%,transparent),inset 0 0 12px color-mix(in srgb,var(--ec) 45%,transparent)}}
 @media (prefers-reduced-motion:reduce){.blk.ev,.blk.ev .sp,.blk.ev::after,.blk.ev .mqt{animation:none}}
-@media (min-width:700px){.blk.sm{font-size:11.5px;letter-spacing:-.3px}}
+@media (min-width:700px){.blk.sm{font-size:11.5px;letter-spacing:-.3px}.blk.ev .mqt{font-size:13px}}
 
 @media (min-width:700px){.day{min-height:160px}.blk{font-size:13px;padding:6px 4px}.pbar b{font-size:12px}.wk{font-size:11px}.day .n{font-size:18px}}
 </style>
@@ -449,7 +446,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint"><span style="opacity:.6">v4.6</span></div>
+      <div class="hint"><span style="opacity:.6">v4.7</span></div>
     </div>
   </div>
 </div>
@@ -504,7 +501,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 
   <nav class="tabbar" aria-label="หน้าหลัก">
     <button data-view="cal" aria-current="page"><i>🗓️</i>ปฏิทิน</button>
-    <button data-view="todo"><i>🩺</i>งาน</button>
+    <button data-view="todo"><i>💉</i>งาน</button>
     <button data-view="arch"><i>🏆</i>ผลงาน</button>
   </nav>
 </div>
@@ -625,7 +622,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 
 <script>
 /* ===== state ===== */
-const COLORS=['#FF8FB8','#B39CFF','#7FD8B8','#8CCBFF','#FFB48A','#FFE38C'];
+const COLORS=['#FF8A00','#C6FF00','#00E5FF','#B266FF','#FFE600','#00FFA3'];
 const SHIFTS={D:{label:'Day',start:'08:00',end:'20:00'},N:{label:'Night',start:'20:00',end:'08:00'},DN:{label:'Day+Night',start:'08:00',end:'08:00'},OFF:{label:'หยุด'}};
 /* รหัสเวรตามตารางของ รพ. */
 const CODES={
