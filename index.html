@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,7 +7,13 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <!-- เวอร์ชัน: เปลี่ยนเลขนี้ทุกครั้งที่อัปไฟล์ใหม่ เพื่อดูว่าเบราว์เซอร์โหลดของใหม่แล้ว -->
-<meta name="app-version" content="3.7">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="My Love Diary">
+<meta name="theme-color" content="#ffffff">
+<meta name="app-version" content="4.0">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -320,6 +326,65 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
   .sheet{left:50%;right:auto;transform:translateX(-50%);width:480px;bottom:0;border-radius:22px 22px 0 0}
   .heat{grid-template-columns:repeat(28,1fr)}
 }
+
+/* ===== ธีมสะอาดสไตล์ TimeBlocks (ขาว + บล็อกพาสเทล) ===== */
+:root{--bg:#FFFFFF;--paper:#FFFFFF;--ink:#222222;--ink-2:#6B6B6B;--ink-3:#A8A8A8;--line:#EDEDED;--line-2:#DADADA;--brand:#F0619C;--brand-soft:#FFEAF2;--blue:#3B9CFF;--sun:#E8505B;
+  --day:#FFF59B;--day-ink:#5A4A00;--night:#D9D4FF;--night-ink:#3B2E8F;--off:#FFE1EA;--off-ink:#C2497E;--card:none;--shadow:0 -10px 40px rgba(0,0,0,.12)}
+body{background:#fff;background-image:none}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.logo::before{filter:none}
+.btn.primary{background:var(--brand);box-shadow:none}
+.btn{border-color:var(--line-2)}
+.chip{box-shadow:none;border-color:var(--line);background:#FAFAFA}
+.summary{margin-bottom:6px}
+.cal-head h2{font-size:22px;color:#222}
+.weekdays div{font-size:13px;color:#999;font-weight:500;padding-bottom:8px}
+.weekdays div:first-child{color:var(--sun)}
+.grid{gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.day{border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;background:#fff;padding:6px 3px 6px;gap:4px;min-height:112px}
+.day:active{transform:none;background:#FAFAFA}
+.day.other{opacity:.35}
+.day .n{font-size:14px;font-weight:500;color:#333;width:26px;height:26px;display:grid;place-items:center;border-radius:50%}
+.day.sun .n{color:var(--sun)}
+.day.today{border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}
+.day.today .n{background:var(--blue);color:#fff;font-weight:600}
+.day.today .n::after{content:"";display:none}
+.day.past{background:#FAFAFA;filter:none;opacity:.55}
+.day.past .n::after{content:"";display:none}
+.day.past .shift,.day.past .pill{filter:saturate(.3)}
+.shift{border-radius:6px;font-size:11px;font-weight:600;padding:4px 2px;letter-spacing:0}
+.shift.D{background:var(--day);color:var(--day-ink)}
+.shift.N{background:var(--night);color:var(--night-ink)}
+.shift.DN{background:linear-gradient(90deg,var(--day) 0 50%,var(--night) 50% 100%);color:#3B2E8F;text-shadow:none}
+.shift.OFF{background:var(--off);color:var(--off-ink)}
+.shift.D::before,.shift.N::before,.shift.DN::before{content:none}
+.shift.OFF::before{content:"💗 "}
+.shift.none{border:0;background:transparent}
+.stime{color:#777;font-size:9.5px}
+.stime .dt{color:#333}
+.stime em{color:var(--brand)}
+.stime .pline{color:#444;font-weight:500}
+.stime .pline i{border-radius:3px;border:0}
+.pill{border-radius:6px;font-weight:500;color:#333}
+.pill.td{background:#F3F3F3;color:#555}
+.tabbar{border-radius:0;border:0;border-top:1px solid var(--line);box-shadow:none;background:#fff}
+.tabbar button{color:#B5B5B5}
+.tabbar button[aria-current="page"]{background:transparent;color:var(--blue)}
+.sheet{background:#fff;box-shadow:var(--shadow)}
+.seg{background:#F2F2F2}
+.seg button[aria-pressed="true"]{color:#222;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.code-grid button,.shift-pick button,.tlist,.quick,.stat,.arch,.readerlink,.prev{box-shadow:none;border-color:var(--line)}
+.code-grid button[aria-pressed="true"]{border-color:var(--blue);background:#EEF6FF;color:#1E6FD9}
+.post-pick button[aria-pressed="true"]{border-color:var(--blue);background:#EEF6FF;color:#1E6FD9}
+.alarm,.readerlink{background:#F7F7F9;border:1px solid var(--line)}
+.switch:checked{background:var(--blue)}
+.check.on{background:var(--brand);border-color:var(--brand)}
+.toast{background:#333;color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.login-card{box-shadow:0 10px 40px rgba(0,0,0,.08);border-color:var(--line)}
+.legend-box summary{color:var(--blue)}
+.sparkle{color:#B5B5B5}
+#syncDot[data-st="ok"] .sd{background:#4CD080}
+@media (min-width:700px){.day{min-height:150px}}
 </style>
 </head>
 <body>
@@ -330,7 +395,7 @@ main{max-width:920px;margin:0 auto;padding:14px 14px calc(84px + var(--safe))}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">ไม่ต้องสมัคร ไม่ต้องล็อกอิน ให้คุณแฟนใช้งานง่าย 💞<br><span style="opacity:.6">v3.7</span></div>
+      <div class="hint">สำหรับคุณแฟน 💞<br><span style="opacity:.6">v4.0</span></div>
     </div>
   </div>
 </div>
