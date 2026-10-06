@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Love Diary">
 <meta name="theme-color" content="#ffffff">
-<meta name="app-version" content="4.4">
+<meta name="app-version" content="4.6">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -428,10 +428,14 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .blk.ev::after{content:"✨";position:absolute;right:3px;top:-1px;font-size:9px;animation:twinkle 1.6s ease-in-out infinite}
 .blk.ev .sp{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%);transform:translateX(-120%);animation:shine 2.6s ease-in-out infinite}
 .blk.ev .em{margin-right:3px}
+.blk.ev{padding:5px 0;text-align:left}
+.blk.ev .mq{display:block;width:100%;overflow:hidden;white-space:nowrap;position:relative;z-index:1;mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}
+.blk.ev .mqt{display:inline-block;padding-left:4px;animation:marquee 7s linear infinite;text-shadow:0 0 6px rgba(255,255,255,.9)}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
 @keyframes twinkle{0%,100%{opacity:.4;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(15deg)}}
 @keyframes glow{0%,100%{box-shadow:0 0 0 1.5px #fff inset,0 0 6px color-mix(in srgb,var(--ec) 60%,transparent)}50%{box-shadow:0 0 0 1.5px #fff inset,0 0 14px color-mix(in srgb,var(--ec) 95%,transparent)}}
-@media (prefers-reduced-motion:reduce){.blk.ev,.blk.ev .sp,.blk.ev::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.blk.ev,.blk.ev .sp,.blk.ev::after,.blk.ev .mqt{animation:none}}
 @media (min-width:700px){.blk.sm{font-size:11.5px;letter-spacing:-.3px}}
 
 @media (min-width:700px){.day{min-height:160px}.blk{font-size:13px;padding:6px 4px}.pbar b{font-size:12px}.wk{font-size:11px}.day .n{font-size:18px}}
@@ -445,7 +449,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint">💞<br><span style="opacity:.6">v4.4</span></div>
+      <div class="hint"><span style="opacity:.6">v4.6</span></div>
     </div>
   </div>
 </div>
@@ -500,8 +504,8 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 
   <nav class="tabbar" aria-label="หน้าหลัก">
     <button data-view="cal" aria-current="page"><i>🗓️</i>ปฏิทิน</button>
-    <button data-view="todo"><i>💝</i>งาน</button>
-    <button data-view="arch"><i>🌸</i>ผลงาน</button>
+    <button data-view="todo"><i>🩺</i>งาน</button>
+    <button data-view="arch"><i>🏆</i>ผลงาน</button>
   </nav>
 </div>
 
@@ -650,7 +654,7 @@ function postLines(sh){const L=[];const t=x=>x.replace(':','.');
 const hh=t=>String(parseInt(t.split(':')[0],10));
 const BLOCK_COLORS={'08-20':['#F6C544','#3A2E00'],'08-22':['#3D9BFF','#fff'],'09-20':['#7ED321','#fff'],'09-22':['#6E8AA0','#fff'],'08-17':['#2BC4B5','#fff'],'12-20':['#F39C38','#fff'],'12-22':['#A66BFF','#fff'],'07-20':['#F6C544','#3A2E00']};
 function shiftBlocks(sh){
-  if(sh.type==='OFF')return [{text:'Off💗',bg:'#F5464D',fg:'#fff'}];
+  if(sh.type==='OFF')return [{text:'Off🤍',bg:'#FF7EB3',fg:'#fff'}];
   const st=shStart(sh),en=shEnd(sh);
   if(sh.type==='N')return [{text:`Night${hh(st)}-${hh(en)}`,bg:'#B36BE6',fg:'#fff'}];
   if(sh.type==='DN'){const k=`${st.slice(0,2)}-20`;const c=BLOCK_COLORS[k]||['#F7C948','#3B2E00'];return [{text:`Day${hh(st)}-20`,bg:c[0],fg:c[1]},{text:`Night20-${hh(en)}`,bg:'#B36BE6',fg:'#fff'}];}
@@ -829,7 +833,7 @@ function renderCal(){
     const wk=d.getDay()===0?`<span class="wk">${isoWeek(d)}</span>`:'';
     const items=[...ev.map(e=>({k:'e',...e})),...td.map(x=>({k:'t',...x}))];
     const maxShow=sh?(sh.type==='OFF'?2:1):3;
-    const pills=items.slice(0,maxShow).map(x=>x.k==='e'?`<span class="blk ev" style="--ec:${x.color}"><i class="sp"></i>${x.emoji?`<span class="em">${x.emoji}</span>`:''}${esc(x.title)}</span>`:`<span class="pill td${x.done?' done':''}">${x.done?'💗':'☐'} ${esc(x.title)}</span>`).join('');
+    const pills=items.slice(0,maxShow).map(x=>x.k==='e'?`<span class="blk ev" style="--ec:${x.color}"><i class="sp"></i><span class="mq"><span class="mqt">${x.emoji?x.emoji+' ':''}${esc(x.title)} · ${x.emoji?x.emoji+' ':''}${esc(x.title)} · </span></span></span>`:`<span class="pill td${x.done?' done':''}">${x.done?'💗':'☐'} ${esc(x.title)}</span>`).join('');
     const more=items.length>maxShow?`<span class="more">+${items.length-maxShow}</span>`:'';
     const dots=pills+more;
     html+=`<button class="day${other?' other':''}${s===t?' today':''}${s<t?' past':''}${d.getDay()===0?' sun':''}" data-d="${s}" aria-label="${thDate(s)}">${wk}<span class="n">${d.getDate()}</span><span class="blks">${shiftHtml}</span><span class="pills">${dots}</span><span class="pbars">${postLinesHtml}</span></button>`;
