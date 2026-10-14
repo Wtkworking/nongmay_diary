@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Love Diary">
 <meta name="theme-color" content="#ffffff">
-<meta name="app-version" content="4.9">
+<meta name="app-version" content="5.0">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -458,6 +458,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .blk.ev .mq{display:block;width:100%;overflow:hidden;white-space:nowrap;position:relative;z-index:1}
 .blk.ev .mqt{display:inline-block;padding:1px 4px 0;font-family:"IBM Plex Sans Thai","Noto Sans Thai",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:0;line-height:1.5;color:#fff;text-shadow:0 0 5px var(--ec),0 0 10px color-mix(in srgb,var(--ec) 70%,transparent);animation:marquee 7s linear infinite}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.blk.ev .mqt .gap{display:inline-block;width:28px}
 @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
 @keyframes twinkle{0%,100%{opacity:.4;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(20deg)}}
 @keyframes neon{0%,100%{box-shadow:0 0 5px color-mix(in srgb,var(--ec) 70%,transparent),inset 0 0 6px color-mix(in srgb,var(--ec) 30%,transparent)}50%{box-shadow:0 0 14px var(--ec),0 0 26px color-mix(in srgb,var(--ec) 55%,transparent),inset 0 0 12px color-mix(in srgb,var(--ec) 45%,transparent)}}
@@ -475,7 +476,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint"><span style="opacity:.6">v4.9</span></div>
+      <div class="hint"><span style="opacity:.6">v5.0</span></div>
     </div>
   </div>
 </div>
@@ -876,8 +877,8 @@ function blockHtml(x,kind){
   const title=(x.emoji?x.emoji+' ':'')+x.title;
   if(kind==='td'&&!x.color&&!x.sparkle)return `<span class="blk td${x.done?' done':''}">${x.done?'💗':'☑️'} ${esc(title)}</span>`;
   const col=x.color||COLORS[0];
-  if(sparkle&&!x.done)return `<span class="blk ev" style="--ec:${col}"><i class="sp"></i><span class="mq"><span class="mqt">${esc(title)} · ${esc(title)} · </span></span></span>`;
-  return `<span class="blk ev still${x.done?' done':''}" style="--ec:${col};${x.done?'opacity:.5;text-decoration:line-through':''}"><span class="mq"><span class="mqt">${esc(title)} · ${esc(title)} · </span></span></span>`;
+  if(sparkle&&!x.done)return `<span class="blk ev" style="--ec:${col}"><i class="sp"></i><span class="mq"><span class="mqt">${esc(title)}<i class="gap"></i>${esc(title)}<i class="gap"></i></span></span></span>`;
+  return `<span class="blk ev still${x.done?' done':''}" style="--ec:${col};${x.done?'opacity:.5;text-decoration:line-through':''}"><span class="mq"><span class="mqt">${esc(title)}<i class="gap"></i>${esc(title)}<i class="gap"></i></span></span></span>`;
 }
 $('fTitle').addEventListener('input',()=>decoEl('ev')._renderPrev());
 $('tTitle').addEventListener('input',()=>decoEl('td')._renderPrev());
@@ -1027,7 +1028,7 @@ function renderArch(){
     byDay[k].forEach(x=>{const tm=new Date(x.completedAt).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
       h+=`<div class="arch"><span class="swatch" style="background:${x.color||'var(--ok)'}"></span><div><div class="t">${esc(x.title)}</div><div class="m">เสร็จเมื่อ ${tm}${x.due?' · กำหนด '+thShort(x.due):''}</div><textarea data-note="${x.id}" placeholder="จดสิ่งที่ได้เรียนรู้ เคสที่เจอ หรือผลลัพธ์...">${esc(x.note||'')}</textarea><div class="foot">${ymd(new Date(x.completedAt))===todayStr()?`<button class="btn small ghost" data-restore="${x.id}">คืนกลับ</button>`:'<span style="font-size:12px;color:var(--ink-3)">🔒</span>'}</div></div></div>`;});
     h+='</div>';});
-  $('archList').innerHTML=h||'<div class="empty">🌸 ยังไม่มีผลงาน — ติ๊กงานที่ทำเสร็จแล้วมันจะมาบานอยู่ที่นี่</div>';
+  $('archList').innerHTML=h||'<div class="empty">🌸 ยังไม่มีผลงาน — ติ๊กงานที่ทำเสร็จแล้ว จะมาเพิ่มอยู่ที่นี่</div>';
 }
 document.addEventListener('input',e=>{const ta=e.target.closest('[data-note]');if(!ta)return;const t=state.todos.find(x=>x.id===ta.dataset.note);if(t){t.note=ta.value;save();}});
 
