@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="My Love Diary">
 <meta name="theme-color" content="#ffffff">
-<meta name="app-version" content="5.0">
+<meta name="app-version" content="5.1">
 <title>My Love Diary 💗 ปฏิทินเวร งาน และผลงาน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -419,6 +419,12 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .pbar i::before{border-right:4px solid var(--pc)}.pbar i::after{border-left:4px solid var(--pc)}
 .pbar b{font-size:10px;font-weight:500;filter:none}
 .summary .chip{font-size:12px}
+.repeat{background:#F7F7F9;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:4px 0 10px}
+.repeat .seg{background:#fff}
+.wdays{display:flex;gap:6px;margin-bottom:8px}
+.wdays button{flex:1;border:1.5px solid var(--line-2);background:#fff;border-radius:10px;padding:7px 0;font-size:13px;color:var(--ink-2)}
+.wdays button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.wdays button:first-child{color:#E8505B}.wdays button:first-child[aria-pressed="true"]{color:#fff}
 .editbar{display:flex;align-items:center;justify-content:space-between;background:#FFF7E6;border:1px solid #FFE0A3;border-radius:12px;padding:6px 6px 6px 12px;margin-bottom:10px;font-size:13px;font-weight:600;color:#7A5200}
 .deco{margin:4px 0 12px}
 .deco .dhead{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--ink-3);font-weight:600;margin:8px 0 4px}
@@ -476,7 +482,7 @@ header{background:#fff;border-bottom:1px solid var(--line)}
     <h1>ตารางเวรของคุณแฟน</h1>
     <div id="loginDemo">
             <button class="btn primary full" id="loginBtn">เข้าสู่ไดอารี่ 💗</button>
-      <div class="hint"><span style="opacity:.6">v5.0</span></div>
+      <div class="hint"><span style="opacity:.6">v5.1</span></div>
     </div>
   </div>
 </div>
@@ -583,6 +589,16 @@ header{background:#fff;border-bottom:1px solid var(--line)}
           <select class="input" id="fRemind"><option value="">ไม่แจ้งเตือน</option><option value="0">เมื่อถึงเวลา</option><option value="15" selected>ก่อน 15 นาที</option><option value="60">ก่อน 1 ชั่วโมง</option><option value="1440">ก่อน 1 วัน</option></select>
           <input class="input" id="fTag" placeholder="หมวด (ไม่บังคับ)">
         </div>
+        <div class="repeat" id="evRepeat">
+          <div class="dhead" style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3);font-weight:600;margin:6px 0 4px"><span>🔁 ทำซ้ำหลายวัน</span></div>
+          <div class="seg" data-r="mode" style="margin-bottom:8px"><button type="button" data-m="none" aria-pressed="true">วันนี้วันเดียว</button><button type="button" data-m="daily" aria-pressed="false">ทุกวัน</button><button type="button" data-m="weekly" aria-pressed="false">เลือกวัน</button></div>
+          <div data-r="opts" style="display:none">
+            <div class="wdays" data-r="wd"><button type="button" data-d="0">อา</button><button type="button" data-d="1">จ</button><button type="button" data-d="2">อ</button><button type="button" data-d="3">พ</button><button type="button" data-d="4">พฤ</button><button type="button" data-d="5">ศ</button><button type="button" data-d="6">ส</button></div>
+            <div class="row" style="align-items:center"><span class="subhead" style="margin:0">จนถึงวันที่</span><input class="input" type="date" data-r="until"></div>
+            <label class="sprow" style="margin-top:4px"><span><b>เฉพาะวันที่หยุด (Off) เท่านั้น</b><small>ข้ามวันที่มีเวร</small></span><input type="checkbox" class="switch" data-r="offonly"></label>
+            <div class="hint" data-r="count" style="margin-top:6px"></div>
+          </div>
+        </div>
         <div class="deco" data-for="ev"></div>
         <button class="btn primary full" id="addEvent">เพิ่มกิจกรรม</button>
       </div>
@@ -591,6 +607,16 @@ header{background:#fff;border-bottom:1px solid var(--line)}
         <div class="editbar" id="tdEditBar" style="display:none"><span>✏️ กำลังแก้ไขงาน</span><button class="btn small ghost" id="tdCancel">ยกเลิก</button></div>
         <input class="input" id="tTitle" placeholder="งานที่ต้องทำให้เสร็จวันนี้" style="margin-bottom:8px">
         <select class="input" id="tRemind" style="margin-bottom:8px"><option value="">ไม่แจ้งเตือน</option><option value="540">แจ้ง 09:00 วันนั้น</option><option value="-1">แจ้ง 09:00 วันก่อน</option></select>
+        <div class="repeat" id="tdRepeat">
+          <div class="dhead" style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3);font-weight:600;margin:6px 0 4px"><span>🔁 ทำซ้ำหลายวัน</span></div>
+          <div class="seg" data-r="mode" style="margin-bottom:8px"><button type="button" data-m="none" aria-pressed="true">วันนี้วันเดียว</button><button type="button" data-m="daily" aria-pressed="false">ทุกวัน</button><button type="button" data-m="weekly" aria-pressed="false">เลือกวัน</button></div>
+          <div data-r="opts" style="display:none">
+            <div class="wdays" data-r="wd"><button type="button" data-d="0">อา</button><button type="button" data-d="1">จ</button><button type="button" data-d="2">อ</button><button type="button" data-d="3">พ</button><button type="button" data-d="4">พฤ</button><button type="button" data-d="5">ศ</button><button type="button" data-d="6">ส</button></div>
+            <div class="row" style="align-items:center"><span class="subhead" style="margin:0">จนถึงวันที่</span><input class="input" type="date" data-r="until"></div>
+            <label class="sprow" style="margin-top:4px"><span><b>เฉพาะวันที่หยุด (Off) เท่านั้น</b><small>ข้ามวันที่มีเวร</small></span><input type="checkbox" class="switch" data-r="offonly"></label>
+            <div class="hint" data-r="count" style="margin-top:6px"></div>
+          </div>
+        </div>
         <div class="deco" data-for="td"></div>
         <button class="btn primary full" id="addTodo">เพิ่มงาน</button>
       </div>
@@ -963,11 +989,28 @@ $('saveShift').onclick=()=>{
 };
 $('clearShift').onclick=()=>{delete state.shifts[sel];save();renderCal();openSheet('shift');toast('ลบเวรแล้ว');};
 
+/* ===== ทำซ้ำหลายวัน ===== */
+const repState={ev:{mode:'none',wd:new Set(),until:'',offonly:false},td:{mode:'none',wd:new Set(),until:'',offonly:false}};
+function repeatDates(k){const st=repState[k];const dates=[];if(st.mode==='none')return [sel];
+  const start=parseYmd(sel);const until=st.until?parseYmd(st.until):(()=>{const e=new Date(start.getFullYear(),start.getMonth()+1,0);return e;})();
+  for(let d=new Date(start);d<=until;d.setDate(d.getDate()+1)){const ds=ymd(d);if(st.mode==='weekly'&&!st.wd.has(d.getDay()))continue;if(st.offonly){const sh=state.shifts[ds];if(!sh||sh.type!=='OFF')continue;}dates.push(ds);}
+  return dates.length?dates:[sel];}
+function buildRepeat(k){const el=$(k+'Repeat');const st=repState[k];
+  const opts=el.querySelector('[data-r="opts"]'),wd=el.querySelector('[data-r="wd"]'),until=el.querySelector('[data-r="until"]'),cnt=el.querySelector('[data-r="count"]');
+  const upd=()=>{opts.style.display=st.mode==='none'?'none':'block';wd.style.display=st.mode==='weekly'?'flex':'none';[...wd.children].forEach(b=>b.setAttribute('aria-pressed',st.wd.has(+b.dataset.d)));const n=repeatDates(k).length;cnt.textContent=st.mode==='none'?'':`จะสร้างทั้งหมด ${n} วัน (เริ่มจาก ${thShort(sel)})`;};
+  el.querySelector('[data-r="mode"]').onclick=e=>{const b=e.target.closest('button');if(!b)return;st.mode=b.dataset.m;[...e.currentTarget.children].forEach(x=>x.setAttribute('aria-pressed',x===b));if(!st.until){const d=parseYmd(sel);st.until=ymd(new Date(d.getFullYear(),d.getMonth()+1,0));until.value=st.until;}if(st.mode==='weekly'&&!st.wd.size)st.wd.add(parseYmd(sel).getDay());upd();};
+  wd.onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=+b.dataset.d;st.wd.has(d)?st.wd.delete(d):st.wd.add(d);upd();};
+  until.onchange=e=>{st.until=e.target.value;upd();};
+  el.querySelector('[data-r="offonly"]').onchange=e=>{st.offonly=e.target.checked;upd();};
+  el._reset=()=>{st.mode='none';st.wd=new Set();st.until='';st.offonly=false;[...el.querySelector('[data-r="mode"]').children].forEach((x,i)=>x.setAttribute('aria-pressed',i===0));until.value='';el.querySelector('[data-r="offonly"]').checked=false;el.style.display='block';upd();};
+  el._hide=()=>{el.style.display='none';};
+}
+buildRepeat('ev');buildRepeat('td');
 let editEv=null,editTd=null;
-function resetEvForm(){editEv=null;$('evEditBar').style.display='none';$('addEvent').textContent='เพิ่มกิจกรรม';$('fTitle').value='';$('fTag').value='';$('fStart').value='17:00';$('fEnd').value='18:00';$('fRemind').value='15';setDeco('ev','🏃‍♀️',COLORS[0],true);}
-function resetTdForm(){editTd=null;$('tdEditBar').style.display='none';$('addTodo').textContent='เพิ่มงาน';$('tTitle').value='';$('tRemind').value='';setDeco('td','✅',COLORS[3],false);}
-function startEditEvent(id){const e=state.events.find(x=>x.id===id);if(!e)return;editEv=id;setPane('event');$('evEditBar').style.display='flex';$('addEvent').textContent='บันทึกการแก้ไข';$('fTitle').value=e.title;$('fTag').value=e.tag||'';$('fStart').value=e.start;$('fEnd').value=e.end;$('fRemind').value=e.remind===''||e.remind==null?'':String(e.remind);setDeco('ev',e.emoji,e.color,e.sparkle!==false);$('fTitle').focus();}
-function startEditTodo(id){const t=state.todos.find(x=>x.id===id);if(!t)return;editTd=id;setPane('todo');$('tdEditBar').style.display='flex';$('addTodo').textContent='บันทึกการแก้ไข';$('tTitle').value=t.title;$('tRemind').value=t.remind===''||t.remind==null?'':String(t.remind);setDeco('td',t.emoji,t.color,!!t.sparkle);$('tTitle').focus();}
+function resetEvForm(){$('evRepeat')._reset();editEv=null;$('evEditBar').style.display='none';$('addEvent').textContent='เพิ่มกิจกรรม';$('fTitle').value='';$('fTag').value='';$('fStart').value='17:00';$('fEnd').value='18:00';$('fRemind').value='15';setDeco('ev','🏃‍♀️',COLORS[0],true);}
+function resetTdForm(){$('tdRepeat')._reset();editTd=null;$('tdEditBar').style.display='none';$('addTodo').textContent='เพิ่มงาน';$('tTitle').value='';$('tRemind').value='';setDeco('td','✅',COLORS[3],false);}
+function startEditEvent(id){const e=state.events.find(x=>x.id===id);if(!e)return;editEv=id;$('evRepeat')._hide();setPane('event');$('evEditBar').style.display='flex';$('addEvent').textContent='บันทึกการแก้ไข';$('fTitle').value=e.title;$('fTag').value=e.tag||'';$('fStart').value=e.start;$('fEnd').value=e.end;$('fRemind').value=e.remind===''||e.remind==null?'':String(e.remind);setDeco('ev',e.emoji,e.color,e.sparkle!==false);$('fTitle').focus();}
+function startEditTodo(id){const t=state.todos.find(x=>x.id===id);if(!t)return;editTd=id;$('tdRepeat')._hide();setPane('todo');$('tdEditBar').style.display='flex';$('addTodo').textContent='บันทึกการแก้ไข';$('tTitle').value=t.title;$('tRemind').value=t.remind===''||t.remind==null?'':String(t.remind);setDeco('td',t.emoji,t.color,!!t.sparkle);$('tTitle').focus();}
 $('evCancel').onclick=resetEvForm;$('tdCancel').onclick=resetTdForm;
 $('addEvent').onclick=()=>{
   const title=$('fTitle').value.trim();if(!title){$('fTitle').focus();return;}
@@ -975,7 +1018,7 @@ $('addEvent').onclick=()=>{
   const r=$('fRemind').value;const d=decoState.ev;
   const data={title,start,end,color:d.color,emoji:d.emoji,sparkle:!!d.sparkle,remind:r===''?'':Number(r),tag:$('fTag').value.trim()};
   if(editEv){const e=state.events.find(x=>x.id===editEv);if(e)Object.assign(e,data);toast('แก้ไขกิจกรรมแล้ว ✏️',title);}
-  else{state.events.push(Object.assign({id:uidGen(),date:sel},data));toast('เพิ่มกิจกรรมแล้ว 🎈',title);}
+  else{const ds=repeatDates('ev');const gid=ds.length>1?uidGen():'';ds.forEach(d=>state.events.push(Object.assign({id:uidGen(),date:d,gid},data)));toast('เพิ่มกิจกรรมแล้ว 🎈',ds.length>1?`${title} · ${ds.length} วัน`:title);}
   resetEvForm();save();renderCal();renderSheet();
 };
 $('fTitle').addEventListener('keydown',e=>{if(e.key==='Enter')$('addEvent').click();});
@@ -984,7 +1027,7 @@ $('addTodo').onclick=()=>{
   const r=$('tRemind').value;const d=decoState.td;
   const data={title,color:d.color,emoji:d.emoji,sparkle:!!d.sparkle,remind:r===''?'':Number(r)};
   if(editTd){const t=state.todos.find(x=>x.id===editTd);if(t)Object.assign(t,data);toast('แก้ไขงานแล้ว ✏️',title);}
-  else{state.todos.push(Object.assign({id:uidGen(),due:sel,done:false,completedAt:null,note:'',tag:''},data));toast('เพิ่มงานแล้ว',title);}
+  else{const ds=repeatDates('td');const gid=ds.length>1?uidGen():'';ds.forEach(d=>state.todos.push(Object.assign({id:uidGen(),due:d,done:false,completedAt:null,note:'',tag:'',gid},data)));toast('เพิ่มงานแล้ว',ds.length>1?`${title} · ${ds.length} วัน`:title);}
   resetTdForm();save();renderAll();renderSheet();
 };
 $('tTitle').addEventListener('keydown',e=>{if(e.key==='Enter')$('addTodo').click();});
@@ -1008,8 +1051,8 @@ document.addEventListener('click',e=>{
   const ee=e.target.closest('[data-edit-e]');if(ee&&$('sheetWrap').classList.contains('open')&&sel>=todayStr()){startEditEvent(ee.dataset.editE);return;}
   const et=e.target.closest('[data-edit-t]');if(et&&$('sheetWrap').classList.contains('open')&&sel>=todayStr()){const t=state.todos.find(x=>x.id===et.dataset.editT);if(t&&t.done){toast('งานที่เสร็จแล้วแก้ไม่ได้');return;}startEditTodo(et.dataset.editT);return;}
   const tg=e.target.closest('[data-toggle]');if(tg){toggleTodo(tg.dataset.toggle);return;}
-  const de=e.target.closest('[data-del-e]');if(de){state.events=state.events.filter(x=>x.id!==de.dataset.delE);save();renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();return;}
-  const dt=e.target.closest('[data-del-t]');if(dt){state.todos=state.todos.filter(x=>x.id!==dt.dataset.delT);save();renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();return;}
+  const de=e.target.closest('[data-del-e]');if(de){const ev0=state.events.find(x=>x.id===de.dataset.delE);let all=false;if(ev0&&ev0.gid){const n=state.events.filter(x=>x.gid===ev0.gid&&x.date>=todayStr()).length;if(n>1)all=confirm(`กิจกรรมนี้สร้างพร้อมกันหลายวัน (เหลืออีก ${n} วัน)\n\nกด ตกลง = ลบทั้งชุดตั้งแต่วันนี้ไป\nกด ยกเลิก = ลบเฉพาะวันนี้`);}state.events=state.events.filter(x=>all?!(x.gid===ev0.gid&&x.date>=todayStr()):x.id!==de.dataset.delE);save();renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();return;}
+  const dt=e.target.closest('[data-del-t]');if(dt){const t0=state.todos.find(x=>x.id===dt.dataset.delT);let all=false;if(t0&&t0.gid){const n=state.todos.filter(x=>x.gid===t0.gid&&!x.done&&(x.due||'')>=todayStr()).length;if(n>1)all=confirm(`งานนี้สร้างพร้อมกันหลายวัน (เหลืออีก ${n} วัน)\n\nกด ตกลง = ลบทั้งชุดตั้งแต่วันนี้ไป\nกด ยกเลิก = ลบเฉพาะวันนี้`);}state.todos=state.todos.filter(x=>all?!(x.gid===t0.gid&&!x.done&&(x.due||'')>=todayStr()):x.id!==dt.dataset.delT);save();renderAll();if($('sheetWrap').classList.contains('open'))renderSheet();return;}
   const rs=e.target.closest('[data-restore]');if(rs){const t=state.todos.find(x=>x.id===rs.dataset.restore);if(t&&t.completedAt&&ymd(new Date(t.completedAt))!==todayStr()){toast('🔒 คืนกลับได้เฉพาะงานที่เสร็จวันนี้');return;}if(t){t.done=false;t.completedAt=null;save();renderAll();toast('คืนกลับไปที่งาน',t.title);}}
 });
 
@@ -1028,7 +1071,7 @@ function renderArch(){
     byDay[k].forEach(x=>{const tm=new Date(x.completedAt).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
       h+=`<div class="arch"><span class="swatch" style="background:${x.color||'var(--ok)'}"></span><div><div class="t">${esc(x.title)}</div><div class="m">เสร็จเมื่อ ${tm}${x.due?' · กำหนด '+thShort(x.due):''}</div><textarea data-note="${x.id}" placeholder="จดสิ่งที่ได้เรียนรู้ เคสที่เจอ หรือผลลัพธ์...">${esc(x.note||'')}</textarea><div class="foot">${ymd(new Date(x.completedAt))===todayStr()?`<button class="btn small ghost" data-restore="${x.id}">คืนกลับ</button>`:'<span style="font-size:12px;color:var(--ink-3)">🔒</span>'}</div></div></div>`;});
     h+='</div>';});
-  $('archList').innerHTML=h||'<div class="empty">🌸 ยังไม่มีผลงาน — ติ๊กงานที่ทำเสร็จแล้ว จะมาเพิ่มอยู่ที่นี่</div>';
+  $('archList').innerHTML=h||'<div class="empty">🌸 ยังไม่มีผลงาน — ติ๊กงานที่ทำเสร็จแล้วมันจะมาบานอยู่ที่นี่</div>';
 }
 document.addEventListener('input',e=>{const ta=e.target.closest('[data-note]');if(!ta)return;const t=state.todos.find(x=>x.id===ta.dataset.note);if(t){t.note=ta.value;save();}});
 
